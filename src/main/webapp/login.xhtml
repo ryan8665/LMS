@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>ورود به سامانه</title>
+        <meta http-equiv="refresh" content="#{facesContext.externalContext.sessionMaxInactiveInterval};url=#{request.contextPath}/login.xhtml"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+         <meta name="keywords" content="ورود به سامانه" />
+        <meta name="description" content="ورود به سامانه/بازیابی گذرواژه"/>
+        <h:outputScript name="js/login.js" library="sentinel-layout" />
+        <h:outputStylesheet name="css/font-icon-layout.css" library="sentinel-layout" />
+        <h:outputStylesheet name="css/sentinel-layout.css" library="sentinel-layout" />
+        <h:outputStylesheet name="css/core-layout.css" library="sentinel-layout" />
+    </h:head>
+
+    <h:body class="fontRegular login-back white-back fontIran" onload="#{login.doit()}">
+
+        <div class="Container">
+            <div class="Container80 MaxWid500 Fnone MarAuto TexAlCenter PaddingTopPercent10">
+
+                <div class="EmptyBox10"></div>
+            </div>
+
+            <!-- LOGIN BOX COVER START -->
+            <div class="Container80 MaxWid500  white-back Fnone MarAuto BordRad10" id="login-box">
+                <div class="Container">
+                    <div class="Container50 TexAlCenter Animated05 BoxSizeBorder TabBtn right" role="1">
+                        <div class="Container80 Fnone MarAuto FontBold"> بازیابی رمز عبور<i class="icon-key-1"></i></div>
+                    </div>
+                    <div class="Container50 TexAlCenter Animated05 BoxSizeBorder TabBtn left TabBtnActiveLeft" role="2">
+                        <div class="Container80 Fnone MarAuto FontBold"> ورود کاربران <i class="icon-lock"></i></div>
+                    </div>
+                    <h:form > 
+                        <div class="Container90 Fnone MarAuto DispNone TexAlCenter TabContent OvHidden" id="TAB1">
+                            <p:messages id="messages2"  autoUpdate="true" closable="true" />
+                            <div class="EmptyBox50"></div>
+                            <p:inputText maxlength="12" id="tel" required="true" requiredMessage="لطفا شماره تلفن همراه خود را وارد نمائید" value="#{adminFacade.ftel}" placeholder="شماره تلفن همراه" styleClass="Container80 Fnone MarAuto Fs18"/>
+                            <div class="EmptyBox20"></div>
+                            <p:commandButton styleClass="BlueButton" resetValues="true" ajax="false" value="ارسال" action="#{adminFacade.doGet_password()}"   update="messages2 tel" />  
+                            <div class="EmptyBox50"></div>
+                        </div>
+                    </h:form>
+                    <h:form> 
+                        <div class="Container90 Fnone MarAuto TexAlCenter TabContent OvHidden" id="TAB2">
+                            <p:messages id="messages"  autoUpdate="true" closable="true" />
+                            <div class="EmptyBox50"></div>
+                            <p:inputText id="username" placeholder="نام کاربری"  value="#{adminFacade.phone}"  styleClass="Container80 Fnone MarAuto Fs18"/> 
+                            <div class="EmptyBox10"></div>
+                            <p:password id="password" placeholder="گذرواژه"  value="#{adminFacade.password}"  styleClass="Container80 Fnone MarAuto Fs18"/>
+                            <div class="EmptyBox20"></div>
+                            <div class="Container85 Fnone MarAuto softgray">
+                            </div>
+                            <div class="EmptyBox30"></div>
+                            <p:commandButton styleClass="BlueButton" resetValues="true" ajax="false" value="ورود" action="#{login.setIsLogin(adminFacade.doEnter())}"   update="messages" />  
+
+                            <div class="EmptyBox20"></div>
+                        </div>
+                    </h:form>    
+                </div>
+            </div>
+        </div>
+        <!-- LOGIN BOX COVER END -->
+
+    </h:body>
+
+</html>

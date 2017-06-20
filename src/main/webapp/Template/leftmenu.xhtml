@@ -1,0 +1,118 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ps="http://primefaces.org/sentinel"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+    <div id="layout-menubar" class="Unselectable fontIran" >
+        <div class="layout-menubarinner-box" id="buttonArea">
+            <a href="#" id="layout-menubar-resize" class="BordRad3" title="Menu Resize"><i class="icon-th-list-2"></i></a>
+            <a href="#" id="layout-menubar-resize2" class="BordRad3" title="Open Menu"><i class="icon-menu"></i></a>
+        </div>
+
+
+
+        <h:form id="menuform"  >
+            <ps:menu id="sm_leftmenu">
+                <p:menuitem  id="sm_dashboard" value="داشبورد" icon="icon-home-outline" outcome="/dashboard" containerStyleClass="layout-menubar-active"/>
+                <c:if test="#{adminFacade.isTeacher == false}">
+                    <p:menuitem  id="sm_news" value="اخبار و اطلاعیه ها" icon="icon-rss-squared" outcome="/News/news" containerStyleClass="layout-menubar-active"/>
+                </c:if>
+                <p:submenu id="sm_message" label="پیام ها" icon="icon-inbox" >
+                    <p:menuitem id="sm_inbox" value="پیام های دریافتی" icon="icon-download-1" outcome="/Messages/inbox" containerStyleClass="layout-menubar-active"/>
+                    <p:menuitem id="sm_sent" value="پیام های ارسالی" icon="icon-upload-1" outcome="/Messages/sent" containerStyleClass="layout-menubar-active"/>
+                    <c:if test="#{adminFacade.isAdmin}">
+                        <p:menuitem id="sm_sms" value="پیامک ها" icon="icon-mail" outcome="/Messages/sms" containerStyleClass="layout-menubar-active"/>
+                    </c:if>
+                </p:submenu>
+                <c:if test="#{adminFacade.isTeacher}">
+                    <p:menuitem  id="sm_alarm" value="آلارم ها" icon=" icon-bell-alt" outcome="/alarm/alarm" containerStyleClass="layout-menubar-active"/>
+                    <p:menuitem  id="sm_panel" value="دانش آموزان" icon="icon-users-1" outcome="/Tusers/panel" containerStyleClass="layout-menubar-active"/>
+                    <p:menuitem  id="sm_group_student" value="گروه ها" icon="icon-cubes" outcome="/Tusers/group" containerStyleClass="layout-menubar-active"/>
+                </c:if>
+                <c:if test="#{adminFacade.isTeacher == false}">
+                    <p:submenu id="sm_user" label="کاربران" icon="icon-user" >
+                        <p:menuitem id="sm_stu" value="دانش آموزان" icon="icon-user" outcome="/Users/user" containerStyleClass="layout-menubar-active"/>
+                        <p:menuitem id="sm_teach" value="معلمین" icon="icon-user" outcome="/Users/teacher" containerStyleClass="layout-menubar-active"/>
+                        <c:if test="#{adminFacade.isAdmin}">
+                            <p:menuitem id="sm_upteach" value="معلمین ارشد" icon="icon-user" outcome="/Users/s-teacher" containerStyleClass="layout-menubar-active"/>
+                        </c:if>
+
+                    </p:submenu>
+                    <p:submenu id="sm_edu" label="آموزش" icon="icon-graduation-cap" >
+                        <c:if test="#{adminFacade.isAdmin}">
+                             <p:menuitem id="sm_media_video" value="رفع اشکال" icon="icon-graduation-cap" outcome="/Education/media" containerStyleClass="layout-menubar-active"/>
+                            <p:menuitem id="sm_type" value="نوع سوال" icon="icon-graduation-cap" outcome="/Education/type" containerStyleClass="layout-menubar-active"/>
+                            <p:menuitem id="sm_group" value="گروه بندی" icon="icon-graduation-cap" outcome="/Education/group" containerStyleClass="layout-menubar-active"/>
+                            <p:menuitem id="sm_pg" value="درس" icon="icon-graduation-cap" outcome="/Education/course" containerStyleClass="layout-menubar-active"/>
+                        </c:if>
+                        <p:menuitem id="sm_subcourse" value="زیر درس" icon="icon-graduation-cap" outcome="/Education/sub-course" containerStyleClass="layout-menubar-active"/>
+                        <p:menuitem id="sm_chapter" value="فصل ها" icon="icon-graduation-cap" outcome="/Education/chapter" containerStyleClass="layout-menubar-active"/>
+                        <p:menuitem id="sm_sup_chapter" value="زیر فصل ها" icon="icon-graduation-cap" outcome="/Education/sub-chapter" containerStyleClass="layout-menubar-active"/>
+                        <p:menuitem id="sm_question" value="سوالات" icon="icon-graduation-cap" outcome="/Education/question" containerStyleClass="layout-menubar-active"/>
+
+                    </p:submenu>
+                </c:if>
+                <p:submenu id="sm_pacandexam" label="پکیج ها و امتحانات" icon="icon-briefcase" >
+                    <c:if test="#{adminFacade.isTeacher == false}">
+                        <p:menuitem id="sm_exam" value="امتحانات" icon="icon-graduation-cap" outcome="/package-exam/exam" containerStyleClass="layout-menubar-active"/>
+                    </c:if>
+
+                    <c:if test="#{adminFacade.isTeacher}">
+
+                        <p:menuitem  id="sm_tpackage" value="پکیج ها" icon="icon-suitcase" outcome="/Tusers/package" containerStyleClass="layout-menubar-active"/>
+                    </c:if>
+                    <c:if test="#{adminFacade.isAdmin}">
+                        <p:menuitem id="sm_package" value="پکیج ها" icon="icon-suitcase" outcome="/package-exam/package" containerStyleClass="layout-menubar-active"/>
+                    </c:if>
+                </p:submenu>
+
+                <c:if test="#{adminFacade.isAdmin}">
+                    <p:submenu id="sm_financs" label="مالی" icon="icon-dollar" >
+                        <p:menuitem id="sm_financs_sub1" value="تراکنش ها" icon="icon-money" outcome="/Finans/finans" containerStyleClass="layout-menubar-active"/> 
+                        <p:menuitem id="sm_financs_sub2" value="بن تخفیف" icon="icon-gift-1" outcome="/Finans/redeem" containerStyleClass="layout-menubar-active"/> 
+                        <p:menuitem id="sm_financs_sub3" value="بن تخفیف استفاده شده" icon="icon-gift-1" outcome="/Finans/redeem-used" containerStyleClass="layout-menubar-active"/> 
+                    </p:submenu>
+                </c:if>
+
+
+
+
+                <p:submenu id="sm_setting_top" label="تنظیمات" icon="icon-cog-2" >
+                    <p:menuitem id="sm_profile" value="ناحیه کاربری" icon="icon-cog-2" outcome="/Profile/profile"  containerStyleClass="layout-menubar-active"/> 
+                    <c:if test="#{adminFacade.isAdmin}">
+                        <p:menuitem id="sm_setting" value="وضعیت سرور" icon="icon-cog-2" outcome="/settings/setting" containerStyleClass="layout-menubar-active"/>
+                    </c:if>
+                </p:submenu>
+                <c:if test="#{adminFacade.isTeacher == false}">
+                    <p:submenu id="sm_website_settings" label="تنظیمات وب سایت" icon=" icon-globe-2" >
+                          <p:menuitem id="sm_web_message" value="پیام ها" icon=" icon-globe-2" outcome="/webSetting/main" containerStyleClass="layout-menubar-active"/> 
+                         <p:menuitem id="sm_web_subs" value="دنبال کننده ها" icon=" icon-globe-2" outcome="/webSetting/main" containerStyleClass="layout-menubar-active"/> 
+                        <p:menuitem id="sm_web_main" value="تنظیمات اصلی " icon=" icon-globe-2" outcome="/webSetting/main" containerStyleClass="layout-menubar-active"/> 
+                        <p:menuitem id="sm_web_head" value="اسلایدر" icon=" icon-globe-2" outcome="/webSetting/home" containerStyleClass="layout-menubar-active"/> 
+                        <p:menuitem id="sm_web_features" value="ویژگی ها" icon=" icon-globe-2" outcome="/webSetting/features" containerStyleClass="layout-menubar-active"/> 
+                        <p:menuitem id="sm_web_whyus" value="چرا ما" icon=" icon-globe-2" outcome="/webSetting/whyus" containerStyleClass="layout-menubar-active"/>
+                        <p:menuitem id="sm_web_description" value="توضیحات" icon=" icon-globe-2" outcome="/webSetting/description" containerStyleClass="layout-menubar-active"/> 
+                        <p:menuitem id="sm_web_service" value="خدمات" icon=" icon-globe-2" outcome="/webSetting/service" containerStyleClass="layout-menubar-active"/> 
+                        <p:menuitem id="sm_web_contact" value="ارتباط" icon=" icon-globe-2" outcome="/webSetting/countact" containerStyleClass="layout-menubar-active"/> 
+                        <p:menuitem id="sm_web_invoice" value="صورت حساب" icon=" icon-globe-2" outcome="/webSetting/invoice" containerStyleClass="layout-menubar-active"/> 
+                        <p:menuitem id="sm_web_policies" value="قوانین و مقررات" icon=" icon-globe-2" outcome="/webSetting/policies" containerStyleClass="layout-menubar-active"/>
+                        <p:menuitem id="sm_shopInstructor" value="راهنمای خرید" icon=" icon-globe-2" outcome="/webSetting/shopInstructor" containerStyleClass="layout-menubar-active"/> 
+                    </p:submenu>
+                </c:if>
+                <c:if test="#{adminFacade.isTeacher == false}">
+                    <p:submenu id="sm_library" label="کتابخانه" icon="icon-tasks" >
+                        <p:menuitem id="sm_video" value="مدیا سنتر" icon="icon-file-video" outcome="/mediaCenter/media" containerStyleClass="layout-menubar-active"/> 
+                        <p:menuitem id="sm_pdf" value="PDF" icon="icon-file-pdf" outcome="/mediaCenter/pdf" containerStyleClass="layout-menubar-active"/> 
+                    </p:submenu>
+                </c:if>
+                <p:menuitem id="sm_toterial" value="راهنما" icon="icon-help-circled" outcome="/toterial/toterial" containerStyleClass="layout-menubar-active"/> 
+                <p:menuitem id="sm_about" value="درباره ما" icon="icon-info-circled" outcome="/About/about" containerStyleClass="layout-menubar-active"/> 
+            </ps:menu>
+        </h:form>
+    </div>
+
+</ui:composition>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    #{features.content()}
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="refresh" content="#{facesContext.externalContext.sessionMaxInactiveInterval};url=#{request.contextPath}/login.xhtml"/>
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title>تنظیمات وب سایت</title>
+        <h:outputScript name="js/layout.js" library="sentinel-layout" />
+        <ui:insert name="head" />
+    </h:head>
+
+    <h:body class="ui-sentinel-rtl" >        
+        <ui:include src="/Template/topbar.xhtml" />
+
+        <ui:include src="/Template/leftmenu.xhtml" />
+
+        <div id="layout-portlets-cover" class="fontRegular">
+            <ui:insert name="content">
+                <div class="ContainerIndent">
+                    <p:panel >
+                        <h:form id="menubar1">
+                            <div class="ContainerIndent ClassRTL">
+                                <f:view class="ClassRTL">
+                                    <p:messages id="messages"  autoUpdate="true" closable="true" />
+                                    <h1>ویژگی ای نرم افزار</h1>
+                                    <h:outputLabel for="f1" value="ویژگی اول: " />
+                                    <div class="EmptyBox5"></div>
+                                    <p:inputText id="f1" value="#{features.f1}" maxlength="25" class="Container60" style="float: right"/>
+                                    <div class="EmptyBox5"></div>
+                                    <h:outputLabel for="t1" value="توضیحات: " />
+                                    <div class="EmptyBox5"></div>
+                                    <p:inputText id="t1" value="#{features.d1}" maxlength="62" class="Container60" style="float: right"/>
+                                    <div class="EmptyBox30"></div>
+                                    <h:outputLabel for="f2" value="ویژگی دوم: " />
+                                    <div class="EmptyBox5"></div>
+                                    <p:inputText id="f2" value="#{features.f2}" maxlength="25" class="Container60" style="float: right"/>
+                                    <div class="EmptyBox5"></div>
+                                    <h:outputLabel for="t2" value="توضیحات: " />
+                                    <div class="EmptyBox5"></div>
+                                    <p:inputText id="t2" value="#{features.d2}" maxlength="62" class="Container60" style="float: right"/>
+                                    <div class="EmptyBox30"></div>
+                                    <h:outputLabel for="f3" value="ویژگی سوم: " />
+                                    <div class="EmptyBox5"></div>
+                                    <p:inputText id="f3" value="#{features.f3}" maxlength="25" class="Container60" style="float: right"/>
+                                    <div class="EmptyBox5"></div>
+                                    <h:outputLabel for="t3" value="توضیحات: " />
+                                    <div class="EmptyBox5"></div>
+                                    <p:inputText id="t3" value="#{features.d3}" maxlength="62" class="Container60" style="float: right"/>
+                                    <div class="EmptyBox30"></div>
+                                    <h:outputLabel for="f4" value="ویژگی چهارم: " />
+                                    <div class="EmptyBox5"></div>
+                                    <p:inputText id="f4" value="#{features.f4}" maxlength="25" class="Container60" style="float: right"/>
+                                    <div class="EmptyBox5"></div>
+                                    <h:outputLabel for="t4"  value="توضیحات: " />
+                                    <div class="EmptyBox5"></div>
+                                    <p:inputText id="t4" value="#{features.d4}" maxlength="62" class="Container60" style="float: right"/>
+                                    <div class="EmptyBox30"></div>
+                                    <h:outputLabel for="f5" value="ویژگی پنجم: " />
+                                    <div class="EmptyBox5"></div>
+                                    <p:inputText id="f5" value="#{features.f5}" maxlength="25" class="Container60" style="float: right"/>
+                                    <div class="EmptyBox5"></div>
+                                    <h:outputLabel for="t5" value="توضیحات: " />
+                                    <div class="EmptyBox5"></div>
+                                    <p:inputText id="t5" value="#{features.d5}" maxlength="62" class="Container60" style="float: right"/>
+                                    <div class="EmptyBox30"></div>
+                                    <h:outputLabel for="f6" value="ویژگی ششم: " />
+                                    <div class="EmptyBox5"></div>
+                                    <p:inputText id="f6" value="#{features.f6}" maxlength="25" class="Container60" style="float: right"/>
+                                    <div class="EmptyBox5"></div>
+                                    <h:outputLabel for="t6" value="توضیحات: " />
+                                    <div class="EmptyBox5"></div>
+                                    <p:inputText id="t6" value="#{features.d6}" maxlength="62" class="Container60" style="float: right"/>
+
+                                </f:view>
+                                <div class="EmptyBox10"></div>     
+                                <div dir="rtl">
+                                    <p:commandButton style="float: left" styleClass="MainButton2" value="ثبت" actionListener="#{features.updateRecord()}" >
+                                        <p:confirm header="آپدیت"  message="اطلاعات ویژگی ای نرم افزار آپدیت شود؟"  />
+                                    </p:commandButton>
+                                    <p:confirmDialog dir="rtl" global="true" showEffect="fade" hideEffect="fade">
+                                        <p:commandButton value="بله" type="button" styleClass="ui-confirmdialog-yes"  />
+                                        <p:commandButton value="خیر" type="button" styleClass="ui-confirmdialog-no"  />
+                                    </p:confirmDialog>
+                                </div>
+                                <div  class="EmptyBox10"></div>
+
+                            </div>
+                        </h:form>
+                    </p:panel>
+
+
+                    <div class="EmptyBox20"></div>
+
+
+                </div>     
+                <ui:include src="/Template/footer.xhtml" />
+            </ui:insert>
+        </div>
+
+        <p:ajaxStatus style="width:32px; height:32px; position:fixed; left:12px; bottom:10px">
+            <f:facet name="start">
+                <p:graphicImage name="images/preloader.gif" library="sentinel-layout"/>
+            </f:facet>
+
+            <f:facet name="complete">
+                <h:outputText value="" />
+            </f:facet>
+        </p:ajaxStatus>
+
+        <h:outputStylesheet name="css/font-icon-layout.css" library="sentinel-layout" />
+        <h:outputStylesheet name="css/sentinel-layout.css" library="sentinel-layout" />
+        <h:outputStylesheet name="css/core-layout.css" library="sentinel-layout" />
+    </h:body>
+
+</html>

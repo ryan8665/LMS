@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="refresh" content="#{facesContext.externalContext.sessionMaxInactiveInterval};url=#{request.contextPath}/login.xhtml"/>
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title>فصل ها</title>
+        <h:outputScript name="js/layout.js" library="sentinel-layout" />
+        <ui:insert name="head" />
+    </h:head>
+
+    <h:body class="ui-sentinel-rtl" >        
+        <ui:include src="/Template/topbar.xhtml" />
+
+        <ui:include src="/Template/leftmenu.xhtml" />
+
+        <div id="layout-portlets-cover" class="fontRegular">
+            <ui:insert name="content">
+                <div class="ContainerIndent">
+                    <p:panel style="min-height: 500px">
+                        <div class="ContainerIndent">
+                            <div dir="rtl">
+                                <h:form id="menubar">
+                                    <p:commandButton styleClass="MainButton2" update=":formnew"  value="جدید" type="button" onclick="PF('dlg1').show();" />
+                                    <p:commandButton styleClass="MainButton2" update=":formdetail" disabled="#{chapterFacade.disable}" value="نمایش" type="button" onclick="PF('dlg2').show();" />
+                                    <p:commandButton styleClass="MainButton2"  ajax="false" style="float: left" value="Export" type="text" >
+                                        <p:dataExporter id="exporter" type="xls" target=":formmain:tbmain" fileName="exporte" />
+                                    </p:commandButton>
+                                </h:form>
+                            </div>
+                            <div class="EmptyBox10"></div>                              
+                            <f:view>
+                                <h:form id="formmain">
+                                    <p:dataTable id="tbmain" value="#{chapterFacade.chapter}" rowKey="#{item.chapterId}" var="item" 
+                                                 selectionMode="single" rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} 
+                                                 {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                                 rowsPerPageTemplate="10,15,25" resizableColumns="true" emptyMessage="No sub-course found with given criteria">
+                                        <p:ajax event="rowSelect" update=":menubar :formnew :formdetail" listener="#{chapterFacade.onRowSelect}"  />
+                                        <p:column class="ClassRTL fontIran Fs12" width="40%">
+                                            <f:facet name="header">
+                                                <h:outputText value="توضیحات"/>
+                                            </f:facet>
+                                            <h:outputText value="#{item.description}"/>
+                                        </p:column>
+                                        <p:column class="ClassRTL fontIran Fs12" width="20%">
+                                            <f:facet name="header">
+                                                <h:outputText value="فصل"/>
+                                            </f:facet>
+                                            <h:outputText value="#{item.title}"/>
+                                        </p:column>
+                                        <p:column class="ClassRTL fontIran Fs12" width="20%">
+                                            <f:facet name="header">
+                                                <h:outputText value="زیر درس"/>
+                                            </f:facet>
+                                            <h:outputText value="#{item.subCourseId.name}"/>
+                                        </p:column>
+                                        <p:column class="ClassRTL fontIran Fs12" width="20%">
+                                            <f:facet name="header">
+                                                <h:outputText value="ردیف"/>
+                                            </f:facet>
+                                            <h:outputText value="#{item.chapterId}"/>
+                                        </p:column>
+                                    </p:dataTable>
+                                </h:form>
+
+                            </f:view>
+                            <div  class="EmptyBox20"></div>
+                        </div>
+                    </p:panel>
+                    <div class="EmptyBox20"></div>
+                    <p:dialog dir="rtl" header="جدید" hideEffect="fade" showEffect="fade" 
+                              closable="true" closeOnEscape="true" widgetVar="dlg1" modal="true"  width="300">
+                        <h:form id="formnew" class="fontIran">
+                            <p:messages id="messages"  autoUpdate="true" closable="true" />
+                            <p:selectOneMenu required="true" value="#{chapterFacade.groupid}"  id="group"   var="gid"   class=" Container90 ClassRTL Responsive" requiredMessage="لطفا زیر درس را وارد نمائید">
+                                <f:selectItem  itemLabel="نام درس" itemValue="" noSelectionOption="true" />
+                                <f:selectItems value="#{subCourseFacade.subCourse}" var="model" itemLabel="#{model.name}" itemValue="#{model.subCourseId} "/>
+                            </p:selectOneMenu>
+                            <div class="EmptyBox10"></div>
+                            <p:inputText placeholder="نام فصل" value="#{chapterFacade.value}" requiredMessage="لطفا نام فصل را وارد نمایید" id="value" maxlength="30" required="true" class="Container96"/>
+                            <div class="EmptyBox5"></div>
+                            <p:inputTextarea placeholder="توضیحات" value="#{chapterFacade.description}" requiredMessage="لطفا توضیحات را وارد نمایید" id="description" maxlength="60" required="true" class="Container96"/>
+                            <div class="EmptyBox5"></div>
+                            <p:commandButton styleClass="MainButton2" resetValues="true" value="ثبت" update=":formmain:tbmain formnew messages :menubar" style="float: left" actionListener="#{chapterFacade.savechapter(adminFacade.userid)}" />
+                        </h:form>
+                    </p:dialog>
+                    <p:dialog dir="rtl" header="جزئیات" hideEffect="fade" showEffect="fade" 
+                              closable="true" closeOnEscape="true" widgetVar="dlg2" modal="true"  width="600">
+                        <h:form id="formdetail" class="fontIran Fs12">
+                            نام فصل: #{chapterFacade.svalue}
+                            <div class="EmptyBox5"></div>
+                             زیر درس: #{chapterFacade.sgroupid}
+                            <div class="EmptyBox5"></div>
+                            توضیحات: #{chapterFacade.sdescription}
+                            <div class="EmptyBox5"></div>
+                        </h:form>
+                    </p:dialog>
+                </div>     
+                <ui:include src="/Template/footer.xhtml" />
+            </ui:insert>
+        </div>
+
+        <p:ajaxStatus style="width:32px; height:32px; position:fixed; left:12px; bottom:10px">
+            <f:facet name="start">
+                <p:graphicImage name="images/preloader.gif" library="sentinel-layout"/>
+            </f:facet>
+
+            <f:facet name="complete">
+                <h:outputText value="" />
+            </f:facet>
+        </p:ajaxStatus>
+
+        <h:outputStylesheet name="css/font-icon-layout.css" library="sentinel-layout" />
+        <h:outputStylesheet name="css/sentinel-layout.css" library="sentinel-layout" />
+        <h:outputStylesheet name="css/core-layout.css" library="sentinel-layout" />
+    </h:body>
+
+</html>

@@ -1,0 +1,271 @@
+
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    #{main.content()} #{slider.content()}  #{contact.content()}  #{description.content()} #{service.content()} #{whyus.content()} #{features.content()} #{invoice.content()}
+    <head>
+        <meta http-equiv="refresh" content="#{facesContext.externalContext.sessionMaxInactiveInterval};url=#{request.contextPath}/login.xhtml"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+        <meta name="keywords" content="ورود به سامانه" />
+        <meta name="description" content="بسته های آموزشی"/>
+        <h:outputScript name="js/login.js" library="sentinel-layout" />
+        <h:outputStylesheet name="css/font-icon-layout.css" library="sentinel-layout" />
+        <h:outputStylesheet name="css/sentinel-layout.css" library="sentinel-layout" />
+        <h:outputStylesheet name="css/core-layout.css" library="sentinel-layout" />
+
+        <!-- Web Fonts  -->
+
+
+        <!-- Libs CSS -->
+
+        <link type="text/css" href="/resources/website/css/bootstrap.min.css" rel="stylesheet" />
+        <link type="text/css" href="/resources/website/css/style.css" rel="stylesheet" />
+        <link type="text/css" href="/resources/website/css/font-awesome.min.css" rel="stylesheet" />
+        <link type="text/css" href="/resources/website/css/v-nav-menu.css" rel="stylesheet" />
+        <link type="text/css" href="/resources/website/css/v-animation.css" rel="stylesheet" />
+        <link type="text/css" href="/resources/website/css/v-bg-stylish.css" rel="stylesheet" />
+        <link type="text/css" href="/resources/website/css/v-shortcodes.css" rel="stylesheet" />
+        <link type="text/css" href="/resources/website/css/theme-responsive.css" rel="stylesheet" />
+        <link type="text/css" href="/resources/website/plugins/owl-carousel/owl.theme.css" rel="stylesheet" />
+        <link type="text/css" href="/resources/website/plugins/owl-carousel/owl.carousel.css" rel="stylesheet" />
+        <!-- Current Page CSS -->
+        <link type="text/css" href="/resources/website/plugins/rs-plugin/css/settings.css" rel="stylesheet" />
+        <link type="text/css" href="/resources/website/plugins/rs-plugin/css/custom-captions.css" rel="stylesheet" />
+
+        <!-- Custom CSS -->
+        <link type="text/css" rel="stylesheet" href="/resources/website/css/custom.css"/>
+        
+        
+        
+
+  
+     
+        
+        <h:outputStylesheet name="css/sentinel-layout.css" library="sentinel-layout" />
+
+
+
+    </head>
+
+    <body class="no-page-top fontWEB">
+
+        <!--Header-->
+        <!--Set your own background color to the header-->
+        <header class="semi-transparent-header" data-bg-color="#ffffff" data-font-color="#000000" dir="rtl">
+            <div class="container">
+
+                <!--Site Logo-->
+                <div class="logo" data-sticky-logo="/resources/website/img/logo.png" data-normal-logo="/resources/website/img/logo.png" >
+                    <a href="/">
+                        <img alt="Venue" src="/resources/website/img/logo.png" data-logo-height="35"/>
+                    </a>
+                </div>
+                <!--End Site Logo-->
+
+                <div class="navbar-collapse nav-main-collapse collapse">
+
+                    <c:if test="#{adminFacade.isStudent}">
+                        #{login.setIsStudent(adminFacade.isStudent)}
+                    </c:if>
+
+                    <!--Main Menu-->
+                    <nav class="nav-main mega-menu one-page-menu" style="float:left">
+                        <ul class="nav nav-pills nav-main" id="mainMenu" style="float:left;direction: rtl">
+                            <li>
+                                <c:if test="#{adminFacade.isLogin || adminFacade.isStudent}">
+                                    <li class='dropdown'> 
+                                        <a class='dropdown-toggle menu-icon' href='#'><i class='fa fa-user'></i><i class='fontWEB FontNormal'>#{adminFacade.f}</i><i class='fa fa-caret-down'></i></a>
+
+                                        <ul class='dropdown-menu' >
+                                            <c:if test="#{adminFacade.isStudent}">
+                                                <li style="text-align: right"><a  onclick="PF('dlg1').show();" ><i class='fontWEB FontNormal' >موجودی حساب #{fiinans.sumFiinans(adminFacade.userid)} تومان</i></a></li>
+                                                <li style="text-align: right"><a href='/web/invoice.xhtml'><i class='fontWEB FontNormal' >صورت حساب ها</i></a></li>
+                                              
+                                            </c:if>
+                                            <c:if test="#{!adminFacade.isStudent}">
+                                                <li style="text-align: right"><a href='../dashboard.xhtml' ><i class='fontWEB FontNormal' >داشبورد</i></a></li>
+                                            </c:if>
+
+                                            <li style="text-align: right"><a href='../logout'><i class='fontWEB FontNormal' >خروج</i></a></li>
+                                        </ul>
+                                    </li>
+
+
+                                </c:if>
+                                <c:if test="#{ !adminFacade.isLogin || adminFacade.isLogin == null }">
+                                    <a href='../login.xhtml'><i class='fa fa-user'></i><i class='fontWEB FontNormal'>ورود</i></a>
+                                </c:if>
+
+
+
+
+
+                            </li>
+                            <li>
+                                <a href="/index.xhtml#download" ><i  class="fa fa-download"></i><i class="fontWEB FontNormal">دانلود</i></a>
+                            </li>
+                          
+                            <li>
+                                <a  href="/index.xhtml#services" ><i class="fa fa-umbrella"></i><i class="fontWEB FontNormal">خدمات</i></a>
+                            </li>
+                            <li>
+                                <a  href="/index.xhtml#describe" ><i class="fa fa-flash"></i><i class="fontWEB FontNormal">توضیحات</i></a>
+                            </li>
+                            <li>
+                                <a  href="/index.xhtml#why-us" ><i class="fa fa-location-arrow"></i><i class="fontWEB FontNormal">چرا ما</i></a>
+                            </li>
+                            <li>
+                                <a  href="/index.xhtml#features" ><i class="fa fa-fire"></i><i class="fontWEB FontNormal">ویژگی ها</i></a>
+                            </li>
+                            <li class="active">
+                                <a  href="/index.xhtml#home" ><i class="fa fa-home "></i><i class="fontWEB FontNormal">خانه</i></a>
+                            </li>
+
+                        </ul>
+                    </nav>
+                    <!--End Main Menu-->
+                </div>
+                <button class="btn btn-responsive-nav btn-inverse" data-toggle="collapse" data-target=".nav-main-collapse">
+                    <i class="fa fa-bars"></i>
+                </button>
+            </div>
+        </header>
+        <!--End Header-->
+
+        <div id="container">
+
+
+
+            <div >
+                <iframe style="width: 100%;height: 600px;margin-top: 50px" src="../web/index.html"></iframe> 
+                <!--End Why Us-->
+
+
+
+                <!--Services-->
+                <div class="v-parallax v-parallax-video v-bg-stylish" id="services" style="background-image: url(/resources/website/img/slider/slider4.jpg);">
+
+                </div>
+                <!--End Services-->
+
+            </div>
+
+            <div class="footer-wrap" >
+                <footer>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <section class="widget">
+                                    <div class="fontWEB StyleFlotRight white">
+                                        <h4 >نماد اعتماد الکترونیک</h4>
+                                    </div>
+                                    <ul >
+                                        <li>
+
+                           <img id='hwlargvlgwmdsguihwla' style='cursor:pointer' onclick='window.open("http://trustseal.enamad.ir/Verify.aspx?id=45904&amp;p=odshyncrjzpgdrfsodsh", "Popup","toolbar=no, location=no, statusbar=no, menubar=no, scrollbars=1, resizable=0, width=580, height=600, top=30")' alt='' src='https://trustseal.enamad.ir/logo.aspx?id=45904&amp;p=aodsfujyzpfvgthvaods'/>
+                                            <span class="tooltip fontWEB">نماد اعتماد الکترونیک<span class="arrow"></span></span>
+
+                                        </li>
+
+                                    </ul>
+                                </section>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <section class="widget">
+                                    <div class="fontWEB StyleFlotRight white">
+                                        <h4>ارتباط با ما</h4>
+                                    </div>
+                                    <div class="footer-contact-info StyleFlotRight fontWEB">
+                                        <ul>
+                                            <li>
+                                                <p class="StyleFlotRight fontWEB Fs10"> #{main.wcompany} <i class="fa fa-building"></i></p>
+                                            </li>
+
+                                            <li>
+                                                <p class="StyleFlotRight fontWEB Fs10 " style="text-align: right"><i class="fa fa-map-marker" style="float: right;"></i> #{contact.waddress} </p>
+                                            </li>
+                                            <li>
+                                                <p class="StyleFlotRight fontWEB Fs10"> info.#{main.wdomain} <i class="fa fa-envelope"></i></p>
+                                            </li>
+                                            <li>
+                                                <p class="StyleFlotRight fontWEB Fs10"><strong> تلفن</strong> #{contact.wtel} <i class="fa fa-phone"></i></p>
+                                            </li>
+                                        </ul>
+                                        <br />
+
+                                        <ul class="social-icons standard StyleFlotRight">
+
+                                            <li class="facebook"><a href="#{contact.wfacebook}" target="_blank"><i class="fa fa-facebook"></i><i class="fa fa-facebook"></i></a></li>
+
+                                            <li class="linkedin"><a href="#{contact.linkdin}" target="_blank"><i class="fa fa-linkedin"></i><i class="fa fa-linkedin"></i></a></li>
+                                            <li class="googleplus"><a href="#{contact.wplus}" target="_blank"><i class="fa fa-google-plus"></i><i class="fa fa-google-plus"></i></a></li>
+
+                                            <li class="twitter"><a href="#{contact.wtelegram}" target="_blank"><i class="fa fa-paper-plane"></i><i class="fa fa-paper-plane"></i></a></li>
+                                            <li class="linkedin"><a href="#{contact.winsta}" target="_blank"><i class="fa fa-instagram"></i><i class="fa fa-instagram"></i></a></li>
+                                        </ul>
+                                    </div>
+                                </section>
+                            </div>
+                            <div class="col-sm-5">
+                                <section class="widget" style="text-align: right">
+                                    <img alt="Venue" src="/resources/website/img/logo-white.png" style="height: 40px; margin-bottom: 20px;" class="StyleFlotRight fontWEB"/>
+                                    <p class="pull-bottom-small fontWEB Fs10 StyleFlotRight" style="text-align: justify;float: right;direction: rtl">
+                                        #{main.wabout}
+                                    </p>
+                                    <p class="StyleFlotRight fontWEB Fs12">
+                                        <a href="/web/about.xhtml">بیشتر</a>
+                                    </p>
+                                </section>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+                </footer>
+
+                <div class="copyright">
+                    <div class="container">
+
+                        <nav class="footer-menu std-menu" style="float: left">
+                            <ul class="menu fontWEB">
+                                <li><a href="/web/about.xhtml">درباره ما</a></li>
+                                <li><a  href="/index.xhtml#contact-us">ارتباط با ما</a></li>
+                                <li><a href="/web/policies.xhtml" target="_blank">قوانین و مقررات</a></li>
+                                <li><a href="/web/instructor.xhtml" target="_blank">راهنمای خرید</a></li>
+                                <li><a  href="/index.xhtml#services" >خدمات</a></li>
+
+                            </ul>
+                        </nav>
+                        <p style="float: right" class="fontWEB">.تمامی حقوق محفوظ است</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--// BACK TO TOP //-->
+        <div id="back-to-top" class="animate-top"><i class="fa fa-angle-up"></i></div>
+
+        <!-- Libs -->
+        <script src="/resources/website/js/jquery.min.js"></script>
+        <script src="/resources/website/js/bootstrap.min.js"></script>
+        <script src="/resources/website/js/jquery.flexslider-min.js"></script>
+        <script src="/resources/website/js/jquery.easing.js"></script>
+        <script src="/resources/website/js/jquery.fitvids.js"></script>
+        <script src="/resources/website/js/jquery.carouFredSel.min.js"></script>
+        <script src="/resources/website/js/theme-plugins.js"></script>
+        <script src="/resources/website/js/jquery.isotope.min.js"></script>
+        <script src="/resources/website/js/imagesloaded.js"></script>
+
+        <script src="/resources/website/js/view.min.js?auto"></script>
+
+        <script src="/resources/website/plugins/rs-plugin/js/jquery.themepunch.tools.min.js"></script>
+        <script src="/resources/website/plugins/rs-plugin/js/jquery.themepunch.revolution.min.js"></script>
+
+        <script src="/resources/website/js/theme-core.js"></script>
+    </body>
+</html>

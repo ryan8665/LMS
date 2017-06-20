@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="refresh" content="#{facesContext.externalContext.sessionMaxInactiveInterval};url=#{request.contextPath}/login.xhtml"/>
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title>تنوع سوالات</title>
+        <h:outputScript name="js/layout.js" library="sentinel-layout" />
+        <ui:insert name="head" />
+        <style type="text/css">
+            .ui-growl {
+                left: 20px;
+            }
+
+        </style>
+    </h:head>
+
+    <h:body class="ui-sentinel-rtl" onload="#{newsFacade.setAid(adminFacade.a)}">        
+        <ui:include src="/Template/topbar.xhtml" />
+
+        <ui:include src="/Template/leftmenu.xhtml" />
+
+        <div id="layout-portlets-cover" class="fontRegular">
+            <ui:insert name="content">
+                <div class="ContainerIndent">
+
+
+                    <p:panel style="min-height: 500px" class="IranSans " >
+                        <div class="ContainerIndent">
+                            <div dir="rtl">
+                                <h:form id="menubar">
+                                    <p:commandButton styleClass="MainButton2" update=":formRead:messages" value="ارسال خبر" type="button" onclick="PF('dlg2').show();" />
+                                   
+                                      <p:commandButton  styleClass="MainButton2" ajax="false" style="float: left" value="Export" type="text" >
+                                        <p:dataExporter id="exporter" type="xls" target=":formmain:tbmain" fileName="exporte" />
+                                    </p:commandButton>
+                                </h:form>
+                            </div>
+                            <div class="EmptyBox10"></div>  
+                            <f:view>
+                               
+
+                                <h:form id="formmain">
+                                    <p:dataTable id="tbmain" rowKey="#{item.QId}"  value="#{questionTypeFacade.type}" var="item">
+                                         <p:column class="ClassRTL fontIran Fs12" width="65%" sortBy="#{item.QDescription}" filterBy="#{item.QDescription}" filterMatchMode="contains">
+                                            <f:facet name="header">
+                                                <h:outputText value="توضیحات"/>
+                                            </f:facet>
+                                            <h:outputText value="#{item.QDescription}"/>
+                                        </p:column>
+                                         <p:column class="ClassRTL fontIran Fs12" width="20%" sortBy="#{item.QName}" filterBy="#{item.QName}" filterMatchMode="contains">
+                                            <f:facet name="header">
+                                                <h:outputText value="نام"/>
+                                            </f:facet>
+                                            <h:outputText value="#{item.QName}"/>
+                                        </p:column>
+                                        <p:column class="ClassRTL fontIran Fs12" width="15%">
+                                            <f:facet name="header">
+                                                <h:outputText value="ردیف"/>
+                                            </f:facet>
+                                            <h:outputText value="#{item.QId}"/>
+                                        </p:column>
+                                       
+                                       
+                                    </p:dataTable>
+                                </h:form>
+
+                            </f:view>
+                        </div>
+                    </p:panel>
+
+                    <div class="EmptyBox20"></div>
+
+                </div>     
+                <ui:include src="/Template/footer.xhtml" />
+            </ui:insert>
+        </div>
+        <p:dialog dir="rtl" header="جدید" hideEffect="fade" showEffect="fade" 
+                  closable="true" closeOnEscape="true" widgetVar="dlg2" modal="true"  width="600">
+            <h:form id="formRead">
+                <p:panel class="Container100 Responsive fontIran">                                     
+                    <p:messages id="messages"  autoUpdate="true" closable="true" />
+
+                    <p:inputTextarea placeholder="نام"  maxlength="25" rows="1" id="etitle" required="true" requiredMessage="نام را وارد نمایید" class="Container90" value="#{questionTypeFacade.name}"  />
+                    <div  class="EmptyBox5"></div>  
+       
+                    <p:inputTextarea  placeholder="توضیحات"  maxlength="60" rows="2" id="enewsl" required="true" requiredMessage="توضیحات را وارد نمایید" class="Container90" value="#{questionTypeFacade.desc}"   />
+                    
+                    <div  class="EmptyBox5"></div> 
+
+                    <p:commandButton style="float: left"  styleClass="MainButton2" resetValues="true" value="ثبت" update=":formmain:tbmain   messages" actionListener="#{questionTypeFacade.doSub(adminFacade.userid)}" />
+                </p:panel>
+            </h:form>
+        </p:dialog> 
+
+        <p:ajaxStatus style="width:32px; height:32px; position:fixed; left:12px; bottom:10px">
+            <f:facet name="start">
+                <p:graphicImage name="images/preloader.gif" library="sentinel-layout"/>
+            </f:facet>
+
+            <f:facet name="complete">
+                <h:outputText value="" />
+            </f:facet>
+        </p:ajaxStatus>
+
+        <h:outputStylesheet name="css/font-icon-layout.css" library="sentinel-layout" />
+        <h:outputStylesheet name="css/sentinel-layout.css" library="sentinel-layout" />
+        <h:outputStylesheet name="css/core-layout.css" library="sentinel-layout" />
+    </h:body>
+
+</html>

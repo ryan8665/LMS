@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="refresh" content="#{facesContext.externalContext.sessionMaxInactiveInterval};url=#{request.contextPath}/login.xhtml"/>
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title>اخبار و اطلاعیه ها</title>
+        <h:outputScript name="js/layout.js" library="sentinel-layout" />
+        <ui:insert name="head" />
+        <style type="text/css">
+            .ui-growl {
+                left: 20px;
+            }
+
+        </style>
+    </h:head>
+
+    <h:body class="ui-sentinel-rtl" onload="#{newsFacade.setAid(adminFacade.a)}">        
+        <ui:include src="/Template/topbar.xhtml" />
+
+        <ui:include src="/Template/leftmenu.xhtml" />
+
+        <div id="layout-portlets-cover" class="fontRegular">
+            <ui:insert name="content">
+                <div class="ContainerIndent">
+
+
+                    <p:panel style="min-height: 500px" class="IranSans " >
+                        <div class="ContainerIndent">
+                            <div dir="rtl">
+                                <h:form id="menubar">
+                                    <p:commandButton styleClass="MainButton2" update=":formRead:messages" value="ارسال خبر" type="button" onclick="PF('dlg2').show();" />
+                                    <p:commandButton styleClass="MainButton2" update=":formmain :formmain:tbmain" value="حذف خبر" disabled="#{newsFacade.disable}" actionListener="#{userStateFacade.deleteNews()}"  type="button" onclick="PF('dlg8').show();" />
+                                    <p:commandButton styleClass="MainButton2" update=":formnews" value="نمایش خبر" disabled="#{newsFacade.disable}" type="button" onclick="PF('dlg3').show();" />
+                                    <p:commandButton styleClass="MainButton2" update=":formphoto" value="تصویر" disabled="#{newsFacade.disable}" type="button" onclick="PF('dlg4').show();" />
+                                      <p:commandButton  styleClass="MainButton2" ajax="false" style="float: left" value="Export" type="text" >
+                                        <p:dataExporter id="exporter" type="xls" target=":formmain:tbmain" fileName="exporte" />
+                                    </p:commandButton>
+                                </h:form>
+                            </div>
+                            <div class="EmptyBox10"></div>  
+                            <f:view>
+                                <h:form id="formmain">
+                                    <p:dataTable id="tbmain" rowKey="#{item.newsId}" value="#{newsFacade.news}" var="item" selectionMode="single" rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} 
+                                                 {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                                 rowsPerPageTemplate="10,15,25" resizableColumns="true"  emptyMessage="No News found with given criteria">
+
+                                        <p:ajax event="rowSelect" update=":formnews :formRead :menubar"  listener="#{newsFacade.onRowSelect}" />
+                                        <p:column class="ClassRTL fontIran Fs12" sortBy="#{item.title}" filterBy="#{item.title}" filterMatchMode="contains">
+                                            <f:facet name="header">
+                                                <h:outputText value="تیتر خبر"/>
+                                            </f:facet>
+                                            <h:outputText value="#{item.title}"/>
+                                        </p:column>
+
+                                        <p:column  class="ClassRTL fontIran Fs12"  width="15%" sortBy="#{item.adminId.userInformationId.lname}" filterBy="#{item.adminId.userInformationId.lname}" filterMatchMode="contains">
+                                            <f:facet name="header">
+                                                <h:outputText value="نام کاربر"/>
+                                            </f:facet>
+                                            <h:outputText value="#{item.adminId.userInformationId.fname} #{item.adminId.userInformationId.lname}"/>
+                                        </p:column>
+                                        <p:column   class="ClassRTL fontIran Fs12"  width="10%">
+                                            <f:facet name="header">
+                                                <h:outputText value="ردیف"/>
+                                            </f:facet>
+                                            <h:outputText value="#{item.newsId}"/>
+                                        </p:column>
+                                    </p:dataTable>
+                                </h:form>
+                            </f:view>
+                        </div>
+                    </p:panel>
+
+                    <div class="EmptyBox20"></div>
+
+                </div>     
+                <ui:include src="/Template/footer.xhtml" />
+            </ui:insert>
+        </div>
+        <p:dialog dir="rtl" header="حذف" hideEffect="fade" showEffect="fade" 
+                  closable="true" closeOnEscape="true" widgetVar="dlg8" modal="true" width="200">
+            <h:form id="formenable">
+                <p:messages id="messages2"  autoUpdate="true" closable="true" />
+                <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+                    <p:commandButton styleClass="MainButton2" update="formenable :formmain:tbmain :menubar" actionListener="#{userStateFacade.deleteNews(newsFacade.nid)}" resetValues="true" value="حذف خبر" onsuccess="#{newsFacade.doDisable()}"  onclick="dlg8.hide()"/>
+                </h:panelGrid>
+
+
+                <br></br>
+
+            </h:form>
+        </p:dialog>
+        
+        <p:dialog dir="rtl" header="ثبت خبر" hideEffect="fade" showEffect="fade" 
+                  closable="true" closeOnEscape="true" widgetVar="dlg2" modal="true"  width="600">
+            <h:form id="formRead">
+                <p:panel class="Container100 Responsive fontIran">                                     
+                    <p:messages id="messages"  autoUpdate="true" closable="true" />
+
+                    <p:inputTextarea counter="d1" placeholder="تیتر خبر"  maxlength="35" rows="1" id="etitle" class="Container90" value="#{newsFacade.etitle}"  />
+                    <div  class="EmptyBox5"></div>  
+                    <h:outputText id="d1" style="float: left" />
+                    <div  class="EmptyBox5"></div> 
+                    <p:inputTextarea counter="d2" placeholder="خبر کوتاه"  maxlength="60" rows="2" id="enewsl" class="Container90" value="#{newsFacade.elit}"   />
+                    <div  class="EmptyBox5"></div>  
+                    <h:outputText id="d2" style="float: left" />
+                    <div  class="EmptyBox5"></div> 
+                    <p:inputTextarea counter="d3" placeholder="متن خبر"  maxlength="800" rows="6" id="enews" class="Container90" value="#{newsFacade.enews}" />
+                    <div  class="EmptyBox5"></div>  
+                    <h:outputText id="d3" style="float: left" />
+                    <div  class="EmptyBox5"></div> 
+                    <p:commandButton styleClass="MainButton2" resetValues="true" value="ارسال" update=":formmain:tbmain formRead  messages" actionListener="#{newsFacade.saveNews(adminFacade.userid)}" />
+                </p:panel>
+            </h:form>
+        </p:dialog> 
+
+        <p:dialog dir="rtl" header="نمایش خبر" hideEffect="fade" showEffect="fade" 
+                  closable="true" closeOnEscape="true" widgetVar="dlg3" modal="true"  width="600">
+            <h:form id="formnews" class="Fs12">
+                <img src="/resources/news/#{newsFacade.nid}.png" height="100" alt="news image" style=" margin-right: auto;margin-left: auto" /> 
+                <div class="EmptyBox5"></div>  
+
+                تیتر خبر: #{newsFacade.titel}
+                <div class="EmptyBox5"></div>  
+                خبر: #{newsFacade.newss}
+                <div class="EmptyBox5"></div>  
+                ثبت کننده: #{newsFacade.user}
+
+            </h:form>
+        </p:dialog> 
+
+        <p:dialog dir="rtl" header="آپلود تصویر" hideEffect="fade" showEffect="fade" 
+                  closable="true" closeOnEscape="true" widgetVar="dlg4" modal="true" >
+            <h:form id="formphoto">
+                <p:fileUpload styleClass="MainButton2" fileUploadListener="#{newsFacade.handleFileUpload}" mode="advanced" dragDropSupport="false"
+                              update="messages" sizeLimit="1500000"  allowTypes="/(\.|\/)(jpg)$/" />
+                <p:growl id="messages" showDetail="true" />
+            </h:form>
+        </p:dialog>
+
+        <p:ajaxStatus style="width:32px; height:32px; position:fixed; left:12px; bottom:10px">
+            <f:facet name="start">
+                <p:graphicImage name="images/preloader.gif" library="sentinel-layout"/>
+            </f:facet>
+
+            <f:facet name="complete">
+                <h:outputText value="" />
+            </f:facet>
+        </p:ajaxStatus>
+
+        <h:outputStylesheet name="css/font-icon-layout.css" library="sentinel-layout" />
+        <h:outputStylesheet name="css/sentinel-layout.css" library="sentinel-layout" />
+        <h:outputStylesheet name="css/core-layout.css" library="sentinel-layout" />
+    </h:body>
+
+</html>

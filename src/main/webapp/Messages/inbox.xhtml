@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="refresh" content="#{facesContext.externalContext.sessionMaxInactiveInterval};url=#{request.contextPath}/login.xhtml"/>
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title>پیام های دریافتی</title>
+        <h:outputScript name="js/layout.js" library="sentinel-layout" />
+        <ui:insert name="head" />
+    </h:head>
+
+    <h:body class="ui-sentinel-rtl" onload="#{messageFacade.setId(adminFacade.i)} #{messageFacade.setUserid(adminFacade.userid)}">        
+        <ui:include src="/Template/topbar.xhtml" />
+
+        <ui:include src="/Template/leftmenu.xhtml" />
+
+        <div id="layout-portlets-cover" class="fontRegular">
+            <ui:insert name="content">
+                <div class="ContainerIndent">
+                    <p:panel style="min-height: 500px">
+                        <div class="ContainerIndent">
+                            <div dir="rtl">
+                                <h:form id="menubar">                                 
+                                    <p:commandButton styleClass="MainButton2" update=":formdetail" disabled="#{messageFacade.disable}" value="نمایش" type="button" onclick="PF('dlg1').show();" />
+                                    <p:commandButton styleClass="MainButton2" ajax="false" style="float: left" value="Export" type="text" >
+                                        <p:dataExporter id="exporter" type="xls" target=":formmain:tbmain" fileName="exporte" />
+                                    </p:commandButton>
+                                </h:form>
+                            </div>
+                            <div class="EmptyBox10"></div>                              
+                            <f:view>
+                                <h:form id="formmain">
+                                    <p:dataTable id="tbmain"  value="#{messageFacade.message}" rowKey="#{item.messageId}" var="item" selectionMode="single" rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} 
+                                                 {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                                 rowsPerPageTemplate="10,15,25" resizableColumns="true" emptyMessage="No Messages found with given criteria">
+                                        <p:ajax event="rowSelect" update=":menubar :forminbox :formRead"  listener="#{messageFacade.onRowSelect}"  />
+                                        <p:column class="ClassRTL fontIran Fs12"  width="20%">
+                                            <f:facet name="header">
+                                                <h:outputText value="تاریخ"/>
+                                            </f:facet>
+                                            <h:outputText value="#{utilities.getCurrentShamsidate2(item.date)}"/>
+                                        </p:column>
+                                        <p:column class="ClassRTL fontIran Fs12"  width="65%" sortBy="#{item.title}" filterBy="#{item.title}" filterMatchMode="contains">
+                                            <f:facet name="header">
+                                                <h:outputText value="موضوع"/>
+                                            </f:facet>
+                                            <h:outputText value="#{item.title}"/>
+                                        </p:column>
+                                        <p:column class="ClassRTL fontIran Fs12"  width="15%" sortBy="#{item.senderId.userInformationId.lname}" filterBy="#{item.senderId.userInformationId.lname}" filterMatchMode="contains">
+                                            <f:facet name="header">
+                                                <h:outputText value="ارسال کننده"/>
+                                            </f:facet>
+                                            <h:outputText value="#{item.senderId.userInformationId.fname} #{item.senderId.userInformationId.lname}"/>
+                                        </p:column>
+
+                                    </p:dataTable>
+                                </h:form>
+
+                            </f:view>
+                            <div  class="EmptyBox20"></div>
+
+                        </div>
+                    </p:panel>
+
+                    <div class="EmptyBox20"></div>
+
+                </div>     
+                <ui:include src="/Template/footer.xhtml" />
+            </ui:insert>
+        </div>
+
+        <p:dialog dir="rtl" header="#{messageFacade.etitile}" hideEffect="fade" showEffect="fade" 
+                  closable="true" closeOnEscape="true" widgetVar="dlg2" modal="true"  width="600">
+            <h:form id="forminbox">
+                #{messageFacade.emsg}  
+                <br> </br>
+
+                #{messageFacade.esender}
+            </h:form>
+
+        </p:dialog>
+
+
+        <p:dialog dir="rtl" header="نمایش پیام" hideEffect="fade" showEffect="fade" 
+                  closable="true" closeOnEscape="true" widgetVar="dlg1" modal="true"  width="600">
+            <h:form id="formRead">
+                <p:panel class="Container100 Responsive fontIran">                                     
+                    <p:messages id="rmessages" showDetail="true" autoUpdate="true" closable="true" />
+
+                    <h:outputText id="fr" value="فرستنده: #{messageFacade.esender}" escape="false" class="fontIran"/>
+                    <div  class="EmptyBox5"></div>
+
+
+                    <h:outputText id="su" value="موضوع: #{messageFacade.etitile}" escape="false" class="fontIran"/>
+
+                    <div  class="EmptyBox5"></div>
+
+                    <h:outputText id="bod" value="متن: #{messageFacade.emsg}"  escape="false" class="fontIran"/>
+                    <div  class="EmptyBox20"></div>
+
+                    <p:inputTextarea required="true" requiredMessage="لطفا متن را وارد نمایید" id="reply" style="float: right" class="Container80 Responsive"  value="#{messageFacade.reply}" rows="3" cols="25"  maxlength="300"  autoResize="false" />
+                    <p:commandButton styleClass="MainButton2" resetValues="true" value="پاسخ" update="formRead" style="float: left" actionListener="#{messageFacade.insertMessageReply()}" />
+                    <div  class="EmptyBox10"></div>
+                </p:panel>
+            </h:form>
+        </p:dialog> 
+
+        <p:ajaxStatus style="width:32px; height:32px; position:fixed; left:12px; bottom:10px">
+            <f:facet name="start">
+                <p:graphicImage name="images/preloader.gif" library="sentinel-layout"/>
+            </f:facet>
+
+            <f:facet name="complete">
+                <h:outputText value="" />
+            </f:facet>
+        </p:ajaxStatus>
+
+        <h:outputStylesheet name="css/font-icon-layout.css" library="sentinel-layout" />
+        <h:outputStylesheet name="css/sentinel-layout.css" library="sentinel-layout" />
+        <h:outputStylesheet name="css/core-layout.css" library="sentinel-layout" />
+    </h:body>
+
+</html>

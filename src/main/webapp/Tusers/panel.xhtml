@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="refresh" content="#{facesContext.externalContext.sessionMaxInactiveInterval};url=#{request.contextPath}/login.xhtml"/>
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title>دانش آموزان</title>
+        <h:outputScript name="js/layout.js" library="sentinel-layout" />
+        <ui:insert name="head" />
+    </h:head>
+
+    <h:body class="ui-sentinel-rtl" >        
+        <ui:include src="/Template/topbar.xhtml" />
+
+        <ui:include src="/Template/leftmenu.xhtml" />
+
+        <div id="layout-portlets-cover" class="fontRegular">
+            <ui:insert name="content">
+                <div class="ContainerIndent">
+
+
+                    <p:panel style="min-height: 500px" class="IranSans " >
+                        <div class="ContainerIndent">
+                            <div dir="rtl">
+                                <h:form id="menubar">
+                                    <p:commandButton styleClass="MainButton2" disabled="#{tuserFacade.disable}" update=":formedet"  value="مشخصات" type="button" onclick="PF('dlg1').show();" />
+                                   
+                                   
+                                    <p:commandButton styleClass="MainButton2" disabled="#{tuserFacade.disable}" update=":formmessage"  value="ارسال پیام" type="button" onclick="PF('dlg2').show();" />
+                                    <p:commandButton styleClass="MainButton2" disabled="#{tuserFacade.disable}" update=":formsendsms"  value="ارسال پیامک" type="button" onclick="PF('dlg3').show();" />
+                                    <p:commandButton styleClass="MainButton2" disabled="#{tuserFacade.disable}" update=":monitor"  value="مانیتور" type="button" onclick="PF('dlg4').show();" />
+                                    <p:commandButton styleClass="MainButton2" disabled="#{tuserFacade.disable}" update=":formenable"  value="مسدود کردن" type="button" onclick="PF('dlg5').show();"/>
+
+                                    <p:commandButton styleClass="MainButton2" disabled="#{tuserFacade.disable}" update=":bbb"  value="امتحانات جامع" type="button" onclick="PF('dlgb').show();" />
+                                     <p:commandButton styleClass="MainButton2" disabled="#{tuserFacade.disable}" update=":aaa"  value="تکالیف" type="button" onclick="PF('dlgo').show();" />
+                                    <p:commandButton styleClass="MainButton2" disabled="#{tuserFacade.disable}" update=":homwork :homwork:chap"  value="تکلیف جدید" type="button" onclick="PF('dlg9').show();" />
+                                    <p:commandButton styleClass="MainButton2" disabled="#{tuserFacade.disable}" update=":groups"  value="گروه" type="button" onclick="PF('dlg8').show();" />
+                                    <p:commandButton styleClass="MainButton2" ajax="false" style="float: left" value="Export" type="text" >
+                                        <p:dataExporter id="exporter" type="xls" target=":formmain:tbmain" fileName="exporte" />
+                                    </p:commandButton>
+                                </h:form>
+                            </div>
+                            <div class="EmptyBox10"></div>  
+                            <f:view>
+                                <h:form id="formmain">
+                                    <p:dataTable  id="tbmain" value="#{tuserFacade.TuserbyTeacher(adminFacade.userid)}" rowKey="#{item.userSCTId}" var="item" selectionMode="single" rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} 
+                                                  {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                                  rowsPerPageTemplate="10,15,25" resizableColumns="true" emptyMessage="No Package found with given criteria">
+                                        <p:ajax event="rowSelect" update=":bbb :aaa :homework :menubar :formedet :formmessage :formsendsms :monitor :formenable :examform :groups" listener="#{tuserFacade.onRowSelect}"  />
+
+                                        <p:column class="ClassRTL fontIran Fs12"  width="15%">
+                                            <f:facet name="header">
+                                                <h:outputText value="تاریخ خرید"/>
+                                            </f:facet>
+                                            <h:outputText value="#{utilities.getCurrentShamsidate2(item.registrationDate)}"/>
+                                        </p:column>
+                                        <p:column class="ClassRTL fontIran Fs12"  width="25%">
+                                            <f:facet name="header">
+                                                <h:outputText value="وضعیت دانش آموز"/>
+                                            </f:facet>
+                                            <h:outputText value="#{item.userSubCourseUserId.userInformationId.stateId.value}"/>
+                                        </p:column>
+
+                                        <p:column class="ClassRTL fontIran Fs12"  width="25%" sortBy="#{item.userSCTSCTId.title}" filterBy="#{item.userSCTSCTId.title}" filterMatchMode="contains">
+                                            <f:facet name="header">
+                                                <h:outputText value="نام بسته"/>
+                                            </f:facet>
+                                            <h:outputText value="#{item.userSCTSCTId.title}"/>
+                                        </p:column>
+                                        <p:column class="ClassRTL fontIran Fs12"  width="25%" sortBy="#{item.userSCTSCTId.subCourseId.name}" filterBy="#{item.userSCTSCTId.subCourseId.name}" filterMatchMode="contains">
+                                            <f:facet name="header">
+                                                <h:outputText value="نام درس"/>
+                                            </f:facet>
+                                            <h:outputText value="#{item.userSCTSCTId.subCourseId.name}"/>
+                                        </p:column>
+                                        <p:column class="ClassRTL fontIran Fs12"  width="35%" sortBy="#{item.userSubCourseUserId.userInformationId.lname}" filterBy="#{item.userSubCourseUserId.userInformationId.lname}" filterMatchMode="contains">
+                                            <f:facet name="header">
+                                                <h:outputText value="نام دانش آموز"/>
+                                            </f:facet>
+                                            <h:outputText value="#{item.userSubCourseUserId.userInformationId.fname} #{item.userSubCourseUserId.userInformationId.lname}"/>
+                                        </p:column>
+
+
+
+                                    </p:dataTable>
+                                </h:form>
+                            </f:view>
+                        </div>
+                    </p:panel>
+
+                    <div class="EmptyBox20"></div>
+                    <p:dialog dir="rtl" header="مشخصات" hideEffect="fade" showEffect="fade" 
+                              closable="true" closeOnEscape="true" widgetVar="dlg1" modal="true"  width="600">
+                        <h:form id="formedet"  class="fontIran Fs12">
+                            نام: #{tuserFacade.name}
+                            <div class="EmptyBox5"></div>
+                            نام خانوادگی: #{tuserFacade.family}
+                            <div class="EmptyBox5"></div>
+                            جنسیت: #{tuserFacade.sex}
+                            <div class="EmptyBox5"></div>
+                            وضعیت: #{tuserFacade.status}
+                            <div class="EmptyBox5"></div>
+                            ایمیل: #{tuserFacade.email}
+                            <div class="EmptyBox5"></div>
+                            همراه: #{tuserFacade.mobile}
+                            <div class="EmptyBox5"></div>
+                            پکیج: #{tuserFacade.pack}
+                            <div class="EmptyBox5"></div>
+                            درس: #{tuserFacade.course}
+                            <div class="EmptyBox5"></div>
+                            توضیحات: #{tuserFacade.desc}
+                            <div class="EmptyBox5"></div>
+                            تاریخ خرید: #{tuserFacade.packDat}
+                            <div class="EmptyBox5"></div>
+                        </h:form>
+                    </p:dialog>
+                    
+                    <p:dialog dir="rtl" header="امتحانات جامع" hideEffect="fade" showEffect="fade" 
+                              closable="true" closeOnEscape="true" widgetVar="dlgb" modal="true"  width="600">
+                        <h:form id="bbb"  class="fontIran Fs12">
+                             <p:dataTable id="tbc" value="#{tuserFacade.ComprehensiveByUserandTeacher(adminFacade.userid)}" rowKey="#{item.cuId}" var="item" selectionMode="single" rows="12" paginator="true" paginatorTemplate="
+                                         {PageLinks} "
+                                         rowsPerPageTemplate="10,15,25" emptyMessage="No comprehensive found with given criteria" paginatorPosition="bottom">
+
+                                <p:column class="ClassRTL fontIran Fs12" width="55%">
+                                    <f:facet name="header">
+                                        <h:outputText value="نام آزمون"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.cuComprehensive.CTitle}"/>
+                                </p:column>
+                                <p:column class="ClassRTL fontIran Fs12" width="15%">
+                                    <f:facet name="header">
+                                        <h:outputText value="نمره"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.cuMark}"/>
+                                </p:column>
+                                <p:column class="ClassRTL fontIran Fs12" width="30%">
+                                    <f:facet name="header">
+                                        <h:outputText value="تاریخ"/>
+                                    </f:facet>
+                                    <h:outputText value="#{utilities.getCurrentShamsidate2(item.cuDate)}"/>
+                                </p:column>
+
+                            </p:dataTable>
+                        </h:form>
+                    </p:dialog>
+                    
+                     <p:dialog dir="rtl" header="تکالیف" hideEffect="fade" showEffect="fade" 
+                              closable="true" closeOnEscape="true" widgetVar="dlgo" modal="true"  width="600">
+                        <h:form id="aaa"  class="fontIran Fs12">
+                             <p:dataTable value="#{tuserFacade.QuizbyTeacher(adminFacade.userid)}" id="tbh" rowKey="#{item.QId}" var="item" selectionMode="single" rows="12" paginator="true" paginatorTemplate="
+                                         {PageLinks} "
+                                         rowsPerPageTemplate="10,15,25" emptyMessage="No comprehensive found with given criteria" paginatorPosition="bottom">
+
+                                <p:column class="ClassRTL fontIran Fs12" width="55%">
+                                    <f:facet name="header">
+                                        <h:outputText value="نام"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.QName}"/>
+                                </p:column>
+                                <p:column class="ClassRTL fontIran Fs12" width="15%">
+                                    <f:facet name="header">
+                                        <h:outputText value="نمره"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.QMark}"/>
+                                </p:column>
+                                <p:column class="ClassRTL fontIran Fs12" width="30%">
+                                    <f:facet name="header">
+                                        <h:outputText value="تاریخ"/>
+                                    </f:facet>
+                                    <h:outputText value="#{utilities.getCurrentShamsidate2(item.QDateIn)}"/>
+                                </p:column>
+
+                            </p:dataTable>
+                        </h:form>
+                    </p:dialog>
+                    
+                    
+                    <p:dialog dir="rtl" header="ارسال پیام" hideEffect="fade" showEffect="fade" 
+                              closable="true" closeOnEscape="true" widgetVar="dlg2" modal="true"  width="600">
+                        <h:form id="formmessage">
+
+                            <p:messages id="messages"  autoUpdate="true" closable="true" />
+                            <p:outputLabel for="msgto2"  value="گیرنده" />
+                            <p:inputText placeholder="پشتیبانی" value="#{tuserFacade.name} #{tuserFacade.family}" id="msgto2" class="Container85  Responsive"  disabled="true" label="msgto"/>
+                            <div  class="EmptyBox10"></div>
+                            <p:outputLabel for="msgSubject2"  value="موضوع" />
+                            <p:inputText id="msgSubject2" class="Container85 Responsive" maxlength="40" value="#{tuserFacade.title}" label="msgSubject" required="true" requiredMessage="لطفا موضوع درخواست خود را وارد فرمائید"/>
+                            <div  class="EmptyBox10"></div>
+                            <p:outputLabel for="bodyTxt2"  value="متن" />
+                            <p:inputTextarea id="bodyTxt2" class="Container85 Responsive" value="#{tuserFacade.msg}" rows="15" cols="25"  maxlength="300"  autoResize="false" required="true" requiredMessage="لطفا متن درخواست خود را وارد فرمائید"/>
+                            <div  class="EmptyBox20"></div>
+                            <div dir="ltr">
+                                <p:commandButton styleClass="MainButton2" actionListener="#{tuserFacade.sendMsg(adminFacade.userid)}" resetValues="true" value="ارسال"   />
+                            </div>
+
+                        </h:form>
+                    </p:dialog> 
+                    <p:dialog dir="rtl" header="ارسال پیامک" hideEffect="fade" showEffect="fade" 
+                              closable="true" closeOnEscape="true" widgetVar="dlg3" modal="true"  width="300">
+                        <h:form id="formsendsms" class="fontIran">
+                            <p:messages id="messages"  autoUpdate="true" closable="true" />
+                            <div class="EmptyBox10"></div>
+                            <p:inputText placeholder="شماره همراه" value="#{tuserFacade.mobile}" disabled="true" requiredMessage="لطفا شماره همراه را وارد نمایید" id="value" maxlength="11" required="true" class="Container96"/>
+                            <div class="EmptyBox5"></div>
+                            <p:inputTextarea counter="d1" placeholder="متن پیام" value="#{tuserFacade.sms}" requiredMessage="لطفا متن پیام را وارد نمایید" id="description" maxlength="140" required="true" class="Container96"/>
+                            <div class="EmptyBox5"></div>
+                            <h:outputText id="d1" style="float: left" />
+                            <div class="EmptyBox5"></div>
+                            <p:commandButton styleClass="MainButton2" resetValues="true" value="ارسال" update="formsendsms messages :menubar" style="float: left" actionListener="#{tuserFacade.send_sms(adminFacade.userid)}" />
+                        </h:form>
+                    </p:dialog>
+                    <p:dialog dir="rtl" header="مانیتور" hideEffect="fade" showEffect="fade" 
+                              closable="true" closeOnEscape="true" widgetVar="dlg4" modal="true"  width="600">
+                        <h:form id="monitor" class="fontIran Fs12" >
+                            <p:dataTable value="#{tuserFacade.tUserUserLog()}" rowKey="#{item.logId}" var="item" selectionMode="single" rows="12" paginator="true" paginatorTemplate="
+                                         {PageLinks} "
+                                         rowsPerPageTemplate="10,15,25" emptyMessage="No Log found with given criteria" paginatorPosition="bottom">
+
+                                <p:column class="ClassRTL fontIran Fs12" width="70%">
+                                    <f:facet name="header">
+                                        <h:outputText value="فعالیت"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.imei}"/>
+                                </p:column>
+                                <p:column class="ClassRTL fontIran Fs12" width="30%">
+                                    <f:facet name="header">
+                                        <h:outputText value="تاریخ"/>
+                                    </f:facet>
+                                    <h:outputText value="#{utilities.getCurrentShamsidate2(item.date)}"/>
+                                </p:column>
+
+                            </p:dataTable>
+
+                        </h:form>
+                    </p:dialog>
+                    <p:dialog dir="rtl" header="مسدود کردن" hideEffect="fade" showEffect="fade" 
+                              closable="true" closeOnEscape="true" widgetVar="dlg5" modal="true"  width="250">
+                        <h:form id="formenable">
+                            <p:messages id="messages2"  autoUpdate="true" closable="true" />
+                            <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+                                <h:outputText value="وضعیت" />
+
+                                <h:outputText value="" />
+
+                                <h:outputText value="" />
+                                <p:commandButton styleClass="MainButton2" update="formenable :formmain:tbmain :menubar" 
+                                                 actionListener="#{userStateFacade.setEnable(tuserFacade.uiid,tuserFacade.stateid,adminFacade.userid)}" 
+                                                 onsuccess="#{tuserFacade.setEnable()}" resetValues="true" value="فعال/غیر فعال"  onclick="dlg5.hide()" />
+                            </h:panelGrid>
+
+
+                            <br></br>
+
+                        </h:form>
+                    </p:dialog>
+                    <p:dialog dir="rtl" header="امتحانات" hideEffect="fade" showEffect="fade" 
+                              closable="true" closeOnEscape="true" widgetVar="dlg6" modal="true"  width="600">
+                        <h:form id="examform" class="fontIran Fs12">
+                            <p:dataTable id="tbmain" value="#{examFacade.ExamByUser(tuserFacade.userid)}" rowKey="#{iteme.examId}" var="iteme"  rows="10"  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} 
+                                         {PreviousPageLink} {PageLinks} {NextPageLink} "
+                                         emptyMessage="No user found with given criteria">
+
+                                <p:column class="ClassRTL fontIran Fs12"  width="60%">
+                                    <f:facet name="header">
+                                        <h:outputText value="نام آزمون"/>
+                                    </f:facet>
+                                    <h:outputText value="#{iteme.title}"/>
+                                </p:column>
+                                <p:column class="ClassRTL fontIran Fs12"  width="40%">
+                                    <f:facet name="header">
+                                        <h:outputText value="تاریخ"/>
+                                    </f:facet>
+                                    <h:outputText value="#{utilities.getCurrentShamsidate2(iteme.exhibitionDate)}"/>
+                                </p:column>
+
+                            </p:dataTable>
+
+
+                        </h:form>
+                    </p:dialog>
+                    
+
+                    <p:dialog dir="rtl" header="گروه ها" hideEffect="fade" showEffect="fade" 
+                              closable="true" closeOnEscape="true" widgetVar="dlg8" modal="true"  width="300">
+                        <h:form id="groups" class="fontIran Fs12" >
+                            <p:messages id="messages2"  autoUpdate="true" closable="true" />
+                            <p:selectOneMenu  style="float: right" required="true" value="#{tuserFacade.usergroupid}"  id="subgroup"   var="items"   class="ClassRTL   Responsive" requiredMessage="لطفا گروه را وارد نمائید">
+                                <f:selectItem  itemLabel="گروه" itemValue="" noSelectionOption="true" />
+                                <f:selectItems value="#{teacherGroupFacade.TeacherGroupByTeacher(adminFacade.userid)}" var="model3" itemLabel="#{model3.TName}" itemValue="#{model3.TId} "/>
+                            </p:selectOneMenu>
+
+                            <p:commandButton styleClass="MainButton2" resetValues="true" value="ثبت" update="groups" actionListener="#{tuserFacade.addGrouptoUser()}" style="float: left"  />
+                        </h:form>
+                    </p:dialog>
+
+                    <p:dialog dir="rtl" header="تکلیف" hideEffect="fade" showEffect="fade" 
+                              closable="true" closeOnEscape="true"  widgetVar="dlg9" modal="true"  width="350">
+                        <h:form id="homework" class="fontIran Fs12" >
+                            <p:messages id="messages2"  autoUpdate="true" closable="true" />
+                            <p:inputText placeholder="نام تکلیف" value="#{quizFacade.name}" requiredMessage="لطفا نام تکلیف را وارد نمایید" id="tit" maxlength="11" required="true" class="Container96"/>
+                            <div class="EmptyBox5"></div>
+                            <p:inputText placeholder="توضیحات تکلیف" value="#{quizFacade.desc}" requiredMessage="لطفا توضیحات تکلیف را وارد نمایید" id="des" maxlength="80" required="true" class="Container96"/>
+                            <div class="EmptyBox5"></div>
+                            <p:inputNumber style="float: right" placeholder="تعداد سوال" value="#{quizFacade.number}" requiredMessage="لطفا تعداد سوال تکلیف را وارد نمایید" id="number" maxValue="25" minValue="1" required="true" class="Container96"/>
+                            <div class="EmptyBox5"></div>
+                            <p:selectOneMenu style="float: right" required="true" value="#{quizFacade.hardness}"  id="importan"   var="items"   class="ClassRTL Container40  Responsive" requiredMessage="لطفا وضعیت دشواری را وارد نمائید">
+                                <f:selectItem  itemLabel="دشواری" itemValue="" noSelectionOption="true" />
+                                <f:selectItems value="#{hardnessFacade.hardness}" var="model8" itemLabel="#{model8.description}" itemValue="#{model8.hardnessId} "/>
+                                <p:ajax  event="change" update="chap" />
+                            </p:selectOneMenu>
+                            <div class="EmptyBox5"></div>
+
+                            <div class="EmptyBox5"></div>
+                            <p:selectOneMenu style="float: right" required="true" value="#{questionFacade.chapterID}"  id="chap"   var="items"   class="ClassRTL Container40  Responsive" requiredMessage="لطفا وضعیت فصل را وارد نمائید">
+                                <f:selectItem  itemLabel="فصل" itemValue="" noSelectionOption="true" />
+                                <f:selectItems value="#{questionFacade.haha2(tuserFacade.pid)}" var="model5" itemLabel="#{model5.title}" itemValue="#{model5.chapterId} "/>
+                                <p:ajax  event="change" update="subchap" />
+                            </p:selectOneMenu>
+                            <div class="EmptyBox5"></div>
+                            <p:selectOneMenu style="float: right" required="true" value="#{quizFacade.subchapter}"  id="subchap"   var="items"   class="ClassRTL Container40  Responsive" requiredMessage="لطفا زیر فصل را وارد نمائید">
+                                <f:selectItem  itemLabel="زیر فصل" itemValue="" noSelectionOption="true" />
+                                <f:selectItems value="#{questionFacade.chapterSortFindBySubchapter}" var="model6" itemLabel="#{model6.title}" itemValue="#{model6.subChapterId} "/>
+                            </p:selectOneMenu>
+                            <div class="EmptyBox10"></div>
+                            <p:commandButton styleClass="MainButton2" resetValues="true" value="ثبت" update="homework messages2 :menubar" style="float: left" onsuccess="PF('dlg9').hide();" actionListener="#{quizFacade.doSubmit(adminFacade.userid,tuserFacade.user,tuserFacade.pid)}" />
+                            <div class="EmptyBox20"></div>
+                        </h:form>
+                    </p:dialog>
+
+
+                   
+
+                </div>     
+                <ui:include src="/Template/footer.xhtml" />
+            </ui:insert>
+        </div>
+
+
+        <p:ajaxStatus style="width:32px; height:32px; position:fixed; left:12px; bottom:10px">
+            <f:facet name="start">
+                <p:graphicImage name="images/preloader.gif" library="sentinel-layout"/>
+            </f:facet>
+
+            <f:facet name="complete">
+                <h:outputText value="" />
+            </f:facet>
+        </p:ajaxStatus>
+
+        <h:outputStylesheet name="css/font-icon-layout.css" library="sentinel-layout" />
+        <h:outputStylesheet name="css/sentinel-layout.css" library="sentinel-layout" />
+        <h:outputStylesheet name="css/core-layout.css" library="sentinel-layout" />
+    </h:body>
+
+</html>

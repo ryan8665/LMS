@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+    <script type="text/javascript">
+        function skinChart() {
+            this.cfg.shadow = false;
+            this.cfg.seriesColors = ['#d1e8ef', '#27aae1', '#276aa9'];
+            this.cfg.grid = {
+                background: '#f3f5f7',
+                borderColor: '#e5ebf0',
+                gridLineColor: '#e5ebf0',
+                shadow: false
+            };
+            this.cfg.axesDefaults = {
+                rendererOptions: {
+                    textColor: '#9fadb5'
+                }
+            };
+            this.cfg.seriesDefaults = {
+                shadow: false,
+                markerOptions: {
+                    shadow: false
+                }
+            }
+        }
+
+        function skinPie() {
+            this.cfg.seriesColors = ['#dae8ef', '#27aae1', '#33ccff', '#9fadb5'];
+            this.cfg.grid = {
+                background: '#ffffff',
+                borderColor: '#eaeaea',
+                gridLineColor: '#e5ebf0',
+                shadow: false,
+                borderWidth: 0
+            };
+            this.cfg.seriesDefaults.shadow = false;
+        }
+    </script>
+    <style type="text/css">
+        .jqplot-target, .jqplot-axis {
+            color: #9fadb5;
+        }
+    </style>
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="refresh" content="#{facesContext.externalContext.sessionMaxInactiveInterval};url=#{request.contextPath}/login.xhtml"/>
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title>داشبورد</title>
+        <h:outputScript name="js/layout.js" library="sentinel-layout" />
+        <ui:insert name="head" />
+    </h:head>
+
+    <h:body class="ui-sentinel-rtl fontIran" onload="#{login.setName(adminFacade.n)} #{login.setFamily(adminFacade.f)}">        
+
+        <ui:include src="/Template/topbar.xhtml" />
+        <ui:include src="/Template/leftmenu.xhtml" />
+        <div id="layout-portlets-cover" class="fontRegular">
+            <ui:insert name="content">
+                <div class="Container100">
+                    <div class="ContainerIndent">
+                        <div class="EmptyBox20"></div>
+                        <div class="Container100">
+                            <div class="Container25 Responsive">
+                                <div class="ContainerIndent">
+                                    <p:panel style="min-height: 300px;" class="fontIran">
+                                        <c:if test="#{!adminFacade.isTeacher}">
+                                            <div class="Container">
+                                                <i class=" icon-users-1 Fs50 Fright Wid25 yellow TexAlCenter MarRight10" ></i>
+                                                <div class="Fs18 Fright MarTop10 leaden Wid70" dir="rtl">کاربران در یک نگاه</div>
+                                                <div class="Fs12 Fright leaden Wid70" dir="rtl"><span class="yellow">کاربران موجود در سامانه  #{adminsFacade.allUsers()}</span></div>
+                                                <div class="EmptyBox10"></div>
+                                                <p:separator styleClass="Wid100"></p:separator>
+                                                <div class="EmptyBox10"></div>
+                                                <div class="Fs12 Fright leaden Wid50 TexAlCenter Responsive fontIran">همکاران<br/><span class="Fs24 orange"><h:outputText value="" escape="false"/>#{adminsFacade.allCoworkers()}</span></div>
+                                                <div class="Fs12 Fright leaden Wid50 TexAlCenter Responsive fontIran">معلمین<br/><span class="Fs24 red"><h:outputText value="" escape="false"/>#{adminsFacade.allteachers()}</span></div>
+                                                <div class="Fs12 Fright leaden Wid100 TexAlCenter fontIran">دانش آموزان<br/><span class="Fs24 hardblue">#{adminsFacade.allstudent()}</span></div>
+                                                <div class="EmptyBox10"></div>
+                                                <p:separator styleClass="Wid100"></p:separator>
+
+                                            </div>
+                                        </c:if>
+                                    </p:panel>
+                                </div>
+                            </div>
+                            <div class="Container25 Responsive">
+                                <div class="ContainerIndent">
+                                    <p:panel style="min-height: 300px;" class="fontIran">
+                                        <c:if test="#{!adminFacade.isTeacher}">
+                                            <div class="Container">
+                                                <i class=" icon-rocket Fs50 Fright Wid25 red TexAlCenter MarRight10" ></i>
+                                                <div class="Fs18 Fright MarTop10 leaden Wid70" dir="rtl">بازدید های امروز</div>
+                                                <div class="Fs12 Fright leaden Wid70" dir="rtl"><span class="red">بازدید کل امروز  #{loginLogFacade.countAll()}</span></div>
+                                                <div class="EmptyBox10"></div>
+                                                <p:separator styleClass="Wid100"></p:separator>
+                                                <div class="EmptyBox10"></div>
+                                                <div class="Fs12 Fright leaden Wid50 TexAlCenter Responsive fontIran">اندروید<br/><span class="Fs24 orange"><h:outputText value="" escape="false"/>#{loginLogFacade.countAndroid()}</span></div>
+                                                <div class="Fs12 Fright leaden Wid50 TexAlCenter Responsive fontIran">آی او اس<br/><span class="Fs24 red"><h:outputText value="" escape="false"/>#{loginLogFacade.countIos()}</span></div>
+                                                <div class="Fs12 Fright leaden Wid100 TexAlCenter fontIran">وب سایت<br/><span class="Fs24 hardblue">#{loginLogFacade.countWeb()}</span></div>
+                                                <div class="EmptyBox10"></div>
+                                                <p:separator styleClass="Wid100"></p:separator>
+
+                                            </div>
+                                        </c:if>
+                                    </p:panel>
+                                </div>
+                            </div>
+                            <div class="Container25 Responsive">
+                                <div class="ContainerIndent">
+                                    <p:panel style="min-height: 300px;" class="fontIran">
+                                        <c:if test="#{!adminFacade.isTeacher}">
+                                            <div class="Container">
+                                                <i class=" icon-data-science-inv Fs50 Fright Wid25 orange TexAlCenter MarRight10" ></i>
+                                                <div class="Fs18 Fright MarTop10 leaden Wid70" dir="rtl">امروز در یک نگاه</div>
+                                                <div class="Fs12 Fright leaden Wid70" dir="rtl"><span class="orange"> #{utilities.today()}</span></div>
+                                                <div class="EmptyBox10"></div>
+                                                <p:separator styleClass="Wid100"></p:separator>
+                                                <div class="EmptyBox10"></div>
+                                                <div class="Fs12 Fright leaden Wid50 TexAlCenter Responsive fontIran">ثبت نام ها<br/><span class="Fs24 orange"><h:outputText value="" escape="false"/>#{loginLogFacade.countRegister()}</span></div>
+                                                <div class="Fs12 Fright leaden Wid50 TexAlCenter Responsive fontIran">فیلم های آموزشی<br/><span class="Fs24 red"><h:outputText value="" escape="false"/>#{loginLogFacade.countAllMedia()}</span></div>
+                                                <div class="Fs12 Fright leaden Wid100 TexAlCenter fontIran">پیامک ها<br/><span class="Fs24 hardblue">#{loginLogFacade.countAllSMS()}</span></div>
+                                                <div class="EmptyBox10"></div>
+                                                <p:separator styleClass="Wid100"></p:separator>
+
+                                            </div>
+                                        </c:if>
+                                    </p:panel>
+                                </div>
+                            </div>
+
+                            <div class="Container25 Responsive" >
+                                <div class="ContainerIndent">
+                                    <p:panel style="min-height: 300px;" class="fontIran" >
+                                        <i class="icon-user-2 Fs50 Fright Wid25 hardblue TexAlCenter MarRight10"></i>
+                                        <div class="Fs18 Fright MarTop10 leaden Wid70" dir="rtl">
+                                            <span class="hardblue"><h:outputText value="#{adminFacade.n} #{adminFacade.f}" escape="false"/>
+                                            </span>, <div class="Fs16">خوش آمدید</div></div>
+
+                                        <div class="EmptyBox10"></div>
+                                        <p:separator styleClass="Wid100"></p:separator>
+                                        <div class="EmptyBox10"></div>
+                                        <div class="Fs16 Fright">
+
+
+                                            <a href="/Messages/inbox.xhtml" class="DispInlBlock Fright Fs13 MarRight20"><i class="hardblue"> (<h:outputText id="txt_count22" value="#{notifications.unread}" />) پیام</i>  <i class="icon-bell-alt hardblue"></i></a>
+                                            <div class="EmptyBox5"></div>
+                                            <a href="/Profile/profile.xhtml" class="DispInlBlock Fright Fs13 MarRight20"><i class="hardblue"> تنظیمات</i>  <i class="icon-cog-alt hardblue"></i></a>
+                                            <h:form>
+
+                                                <p:poll interval="9" ignoreAutoUpdate="true"  update="txt_count22" />
+                                            </h:form>
+
+                                        </div>
+                                        <div class="EmptyBox10"></div>
+                                        <p:separator styleClass="Wid100"></p:separator>
+                                        <div class="EmptyBox10"></div>
+                                        <i class="icon-key softgray MarRight10 Fs14 Fright"></i><i class="MarRight10 Fs11 Fright">آخرین ورود شما <h:outputText value="#{utilities.getCurrentShamsidate3(adminFacade.l)}" escape="false"> </h:outputText> </i>
+                                        <div class="EmptyBox10"></div>
+                                        <p:separator styleClass="Wid100"></p:separator>
+                                    </p:panel>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>              
+                <div class="Container100">
+                    <div class="ContainerIndent">
+                        <div class="EmptyBox20"></div>
+                        <div class="Container100">
+                            <div class="Container50 Responsive100 ui-fluid" >
+                                <div class="ContainerIndent">
+                                    <p:panel style="min-height: 300px;" >
+                                        <f:view>
+                                            <h:form id="formmain">
+                                                <p:dataTable id="tbmain" value="#{logFacade.log}" rowKey="#{item.logId}" var="item" selectionMode="single" 
+                                                             rows="7" paginator="true" paginatorTemplate="
+                                                             {PreviousPageLink} {PageLinks} {NextPageLink} "
+                                                             paginatorPosition="bottom" resizableColumns="true" lazy="true" emptyMessage="No log found with given criteria">
+                                                    <p:column class="ClassRTL  Fs12"  width="25%">
+                                                        <f:facet name="header">
+                                                            <h:outputText value="تاریخ"/>
+                                                        </f:facet>
+                                                        <h:outputText value="#{utilities.dashbordDate(item.date)}">
+
+                                                        </h:outputText>
+                                                    </p:column>
+                                                    <p:column class="ClassRTL fontIran Fs12"  width="50%">
+                                                        <f:facet name="header">
+                                                            <h:outputText value="عملیات"/>
+                                                        </f:facet>
+                                                        <h:outputText value="#{item.imei}"/>
+                                                    </p:column>
+                                                    <p:column class="ClassRTL fontIran Fs12"  width="25%">
+                                                        <f:facet name="header">
+                                                            <h:outputText value="نام کاربر"/>
+                                                        </f:facet>
+                                                        <h:outputText value="#{item.userId.userInformationId.fname} #{item.userId.userInformationId.lname}"/>
+                                                    </p:column>
+                                                </p:dataTable>
+                                            </h:form>
+                                        </f:view>
+                                    </p:panel>
+                                </div>
+                            </div>
+                            <div class="Container25 Responsive">
+                                <div class="ContainerIndent">
+
+                                    <p:panel style="min-height: 300px;" class="fontIran">
+                                        <c:if test="#{!adminFacade.isTeacher}">
+                                            <p:chart type="pie" model="#{chartView.pieModel}"  responsive="true"/>
+                                        </c:if>
+                                    </p:panel>
+                                </div>
+                            </div>
+                            <div class="Container25 Responsive" >
+                                <div class="ContainerIndent">
+                                    <p:panel style="min-height: 300px;" class="fontIran" >
+                                        <c:if test="#{!adminFacade.isTeacher}">
+                                            <p:chart type="pie" model="#{chartView.pieModelVisitor}"  responsive="true"/>
+                                        </c:if>
+                                    </p:panel>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <ui:include src="/Template/footer.xhtml" />
+            </ui:insert>
+        </div>
+        <div class="EmptyBox20"></div>
+
+        <p:ajaxStatus style="width:32px; height:32px; position:fixed; left:12px; bottom:10px">
+            <f:facet name="start">
+                <p:graphicImage name="images/preloader.gif" library="sentinel-layout"/>
+            </f:facet>
+
+            <f:facet name="complete">
+                <h:outputText value="" />
+            </f:facet>
+        </p:ajaxStatus>
+
+        <h:outputStylesheet name="css/font-icon-layout.css" library="sentinel-layout" />
+        <h:outputStylesheet name="css/sentinel-layout.css" library="sentinel-layout" />
+        <h:outputStylesheet name="css/core-layout.css" library="sentinel-layout" />
+        <h:outputStylesheet name="css/editedstyle.css" library="sentinel-layout" />
+    </h:body>
+
+</html>

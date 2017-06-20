@@ -1,0 +1,74 @@
+<ui:composition 
+
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+
+    <div id="layout-header" class="Unselectable fontRegular">
+        #{login.setIsAdmin(adminFacade.isAdmin)}
+        <a href="/dashboard.xhtml" id="layout-logo">
+
+            <span class="Fs18 fontIran Fleft MarRight20"><span class="white Fs14">سامانه </span><span class="yellow "> آموزشمند</span>
+            </span>
+        </a>
+        <ul id="sm-topmenu" class="layout-header-widgets white Fs14">
+            <li class="Fleft BordRadHalf TexAlCenter"><i class="icon-power"></i>
+                <ul class="layout-header-widgets-submenu BordRad5 shadows white Animated05">
+                    <li class="Animated05"><a href="/"  class="white Unselectable fontIran Fs12"><i class="icon-ccw-1 "></i>صفحه اصلی</a></li>
+                    <li class="Animated05"><a href="/logout"  class="white Unselectable fontIran Fs12"><i class="icon-logout"></i>خروج</a></li>
+                </ul>
+            </li>
+
+            <li onclick="location.href = '/Messages/inbox.xhtml';" class="Fleft BordRadHalf TexAlCenter "><i class="icon-mail"></i>
+                <span class="alertBubble BordRad10 Fs9">
+                    <h:form>
+                        <h:outputText id="alarm_count" value="#{notifications.unread}" />
+                        <p:poll interval="5" ignoreAutoUpdate="true" listener="#{notifications.unreadmessages(adminFacade.userid)}" update="alarm_count" />
+                    </h:form>
+
+                </span> 
+                <ul>
+
+                </ul>
+            </li>
+            
+            <c:if test="#{adminFacade.isTeacher}">
+                  <li class="Fleft BordRadHalf TexAlCenter"><a href="/alarm/alarm.xhtml"><i class="icon-bell-alt white"></i> </a></li>
+            </c:if>
+          
+            <li class="Fleft BordRadHalf TexAlCenter"><i class="icon-user-male"></i>
+                <ul class="layout-header-widgets-submenu BordRad5 shadows white Animated05">
+                    <li class="Animated05"><a href="/Profile/profile.xhtml" class="white Unselectable"><i class="icon-user-male Fs26 OvHidden"></i><span class="fontIran Fs15"><h:outputText value="#{adminFacade.n}" escape="false"/><h:outputText value=" " escape="false"/><h:outputText value="#{adminFacade.f}" escape="false"/>
+                                <span class="Fs11">
+                                    <c:if test="#{adminFacade.isAdmin}">
+                                        مدیریت
+                                    </c:if>
+                                    <c:if test="#{!adminFacade.isAdmin}">
+                                        <c:if test="#{adminFacade.isTeacher}">
+                                            استاد
+                                        </c:if>
+                                        <c:if test="#{!adminFacade.isTeacher}">
+                                            همکار سامانه
+                                        </c:if>
+                                    </c:if>
+
+                                </span> </span>
+                        </a></li>
+                    <li class="Animated05"><a href="/Users/user.xhtml" class="white Unselectable fontIran Fs12"><i class="icon-users-2"></i>بخش کاربران</a></li>
+                    <li class="Animated05"><a href="/Profile/profile.xhtml" class="white Unselectable fontIran Fs12"><i class="icon-sliders"></i>ناحیه کاربری</a></li>
+                </ul>
+            </li>
+
+        </ul>
+        <!-- NEVER REMOVE FOLLOWING 'UL' TAG ! BECAUSE THIS CONTAINS RESPONSIVE MODE HEADER MENU OPEN-CLOSE BUTTON -->
+        <ul id="sm-mobiletopmenu" class="layout-header-widgets white Fs14">
+            <li class="Fleft BordRadHalf TexAlCenter Animated05 DisplayOnResponsive"><i class="icon-th-1"></i></li>
+        </ul>
+        <!-- ****** -->
+    </div>
+
+</ui:composition>

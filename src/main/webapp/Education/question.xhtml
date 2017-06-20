@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="refresh" content="#{facesContext.externalContext.sessionMaxInactiveInterval};url=#{request.contextPath}/login.xhtml"/>
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title>بانک سوال</title>
+        <h:outputScript name="js/layout.js" library="sentinel-layout" />
+        <ui:insert name="head" />
+        <style type="text/css">
+            .ui-growl {
+                left: 20px;
+            }
+
+        </style>
+    </h:head>
+
+    <h:body class="ui-sentinel-rtl" onload="#{questionFacade.setAdminID(adminFacade.a)}" >        
+        <ui:include src="/Template/topbar.xhtml" />
+
+        <ui:include src="/Template/leftmenu.xhtml" />
+
+        <div id="layout-portlets-cover" class="fontRegular">
+            <ui:insert name="content">
+                <div class="ContainerIndent">
+                    <p:panel style="min-height: 500px">
+                        <div class="ContainerIndent">
+                            <div dir="rtl">
+                                <h:form id="menubar">
+                                    <p:commandButton styleClass="MainButton2" update=":formnew"  value="جدید" type="button" onclick="PF('dlg1').show();" />
+                                    <p:commandButton styleClass="MainButton2" update=":formanswer" disabled="#{questionFacade.disable}"  value="گزینه ها" type="button" onclick="PF('dlg2').show();" />
+                                    <p:commandButton styleClass="MainButton2" update=":formphoto" disabled="#{questionFacade.disable}"  value="تصویر" type="button" onclick="PF('dlg3').show();" />
+                                    <p:commandButton styleClass="MainButton2" update=":formdetail" disabled="#{questionFacade.disable}" value="نمایش" type="button" onclick="PF('dlg4').show();" />
+                                    <p:commandButton styleClass="MainButton2" ajax="false" style="float: left" value="Export" type="text" >
+                                        <p:dataExporter id="exporter" type="xls" target=":formmain:tbmain" fileName="exporte" />
+                                    </p:commandButton>
+                                </h:form>
+                            </div>
+                            <div class="EmptyBox10"></div>                              
+                            <f:view>
+                                <h:form id="formmain">
+                                    <p:dataTable id="tbmain" value="#{questionFacade.question}" rowKey="#{item.questionId}"  var="item" 
+                                                 selectionMode="single" rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} 
+                                                 {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                                 rowsPerPageTemplate="10,15,25" resizableColumns="true" emptyMessage="No question found with given criteria">
+                                        <p:ajax event="rowSelect" update=":menubar :formnew :formdetail :formanswer" listener="#{questionFacade.onRowSelect}"  />
+                                        <p:column class="ClassRTL fontIran Fs12" width="85%" sortBy="#{item.title}" filterBy="#{item.title}" filterMatchMode="contains">
+                                            <f:facet name="header">
+                                                <h:outputText value="سوال"/>
+                                            </f:facet>
+                                            <h:outputText value="#{item.title}"/>
+                                        </p:column>
+                                        <p:column class="ClassRTL fontIran Fs12" width="15%" sortBy="#{item.creatorId.userInformationId.lname}" filterBy="#{item.creatorId.userInformationId.lname}" filterMatchMode="contains">
+                                            <f:facet name="header">
+                                                <h:outputText value="ثبت کننده"/>
+                                            </f:facet>
+                                            <h:outputText value="#{item.creatorId.userInformationId.fname} #{item.creatorId.userInformationId.lname}"/>
+                                        </p:column>
+                                    </p:dataTable>
+                                </h:form>
+                            </f:view>
+                            <div  class="EmptyBox20"></div>
+                        </div>
+                    </p:panel>
+                    <div class="EmptyBox20"></div>
+                    <p:dialog dir="rtl" header="جدید" hideEffect="fade" showEffect="fade" 
+                              closable="true" closeOnEscape="true" widgetVar="dlg1" modal="true"  width="550" height="500" class="fontIran ClassRTL">
+                        <h:form id="formnew" class="fontIran ClassRTL" >
+                            <p:messages id="messages"  autoUpdate="true" closable="true" />
+                            <p:inputText placeholder="متن سوال" value="#{questionFacade.iquestion}" requiredMessage="لطفا متن سوال را وارد نمایید" id="value" maxlength="190" required="true" class="Container96"/>
+                            <div class="EmptyBox5"></div>
+                            <p:inputTextarea counter="d1" placeholder="راهنما" value="#{questionFacade.idescription}" requiredMessage="لطفا راهنما را وارد نمایید" id="description" maxlength="500" required="true" class="Container96"/>
+                            <div class="EmptyBox5"></div>
+                            <h:outputText id="d1" style="float: left" />
+                            <p:inputTextarea counter="d2" placeholder="نکته" value="#{questionFacade.itip}" requiredMessage="لطفا نکته را وارد نمایید" id="description2" maxlength="500" required="true" class="Container96"/>
+                            <div class="EmptyBox5"></div>
+                            <h:outputText id="d2" style="float: left" />
+                            <div class="EmptyBox5"></div>
+                            <p:inputNumber style="float: right" placeholder="زمان پاسخ گویی (مثال 2 دقیقه)" value="#{questionFacade.time}" requiredMessage="لطفا زمان پاسخ گویی را وارد نمایید" id="number" maxValue="20" minValue="1" required="true" class="Container96"/>
+                            <div class="EmptyBox5"></div>
+
+                            <div class="EmptyBox5"></div>
+                            <p:selectOneMenu  style="float: right" required="true" value="#{questionFacade.subcourceID}"    id="subles"   var="items"   class="ClassRTL Container40  Responsive" requiredMessage="لطفا زیر درس را وارد نمائید">
+                                <f:selectItem  itemLabel="زیر درس" itemValue="" noSelectionOption="true" />
+                                <f:selectItems value="#{subCourseFacade.subCourseSort}" var="model3" itemLabel="#{model3.name}" itemValue="#{model3.subCourseId} "/>
+                                <p:ajax  event="change" update="chap" />
+                            </p:selectOneMenu>
+                            <div class="EmptyBox5"></div>
+                            <p:selectOneMenu style="float: right" required="true" value="#{questionFacade.chapterID}"  id="chap"   var="items"   class="ClassRTL Container40  Responsive" requiredMessage="لطفا وضعیت فصل را وارد نمائید">
+                                <f:selectItem  itemLabel="فصل" itemValue="" noSelectionOption="true" />
+                                <f:selectItems value="#{questionFacade.haha()}" var="model5" itemLabel="#{model5.title}" itemValue="#{model5.chapterId} "/>
+                                <p:ajax  event="change" update="subchap" />
+                            </p:selectOneMenu>
+                            <div class="EmptyBox5"></div>
+                            <p:selectOneMenu style="float: right" required="true" value="#{questionFacade.subchapterID}"  id="subchap"   var="items"   class="ClassRTL Container40  Responsive" requiredMessage="لطفا زیر فصل را وارد نمائید">
+                                <f:selectItem  itemLabel="زیر فصل" itemValue="" noSelectionOption="true" />
+                                <f:selectItems value="#{questionFacade.chapterSortFindBySubchapter}" var="model6" itemLabel="#{model6.title}" itemValue="#{model6.subChapterId} "/>
+                            </p:selectOneMenu>
+                            <div class="EmptyBox10"></div>
+                            <p:selectOneMenu style="float: right" required="true" value="#{questionFacade.iimportance}"  id="hardne"   var="items"   class="ClassRTL Container40  Responsive" requiredMessage="لطفا وضعیت اهمیت را وارد نمائید">
+                                <f:selectItem  itemLabel="اهمیت" itemValue="" noSelectionOption="true" />
+                                <f:selectItems value="#{importanceFacade.importance}" var="model7" itemLabel="#{model7.description}" itemValue="#{model7.importanceId} "/>
+                            </p:selectOneMenu>
+                            <div class="EmptyBox5"></div>
+                            <p:selectOneMenu style="float: right" required="true" value="#{questionFacade.ihardnes}"  id="importan"   var="items"   class="ClassRTL Container40  Responsive" requiredMessage="لطفا وضعیت دشواری را وارد نمائید">
+                                <f:selectItem  itemLabel="دشواری" itemValue="" noSelectionOption="true" />
+                                <f:selectItems value="#{hardnessFacade.hardness}" var="model8" itemLabel="#{model8.description}" itemValue="#{model8.hardnessId} "/>
+                            </p:selectOneMenu>
+                            <div class="EmptyBox10"></div>
+                            <p:selectOneMenu style="float: right" required="true" value="#{questionFacade.qtype}"  id="qtype"   var="items"   class="ClassRTL Container40  Responsive" requiredMessage="لطفا نوع سوال را وارد نمائید">
+                                <f:selectItem  itemLabel="نوع سوال" itemValue="" noSelectionOption="true" />
+                                <f:selectItems value="#{questionTypeFacade.type}" var="model9" itemLabel="#{model9.QName}" itemValue="#{model9.QId} "/>
+                            </p:selectOneMenu>
+                            <div class="EmptyBox10"></div>
+                            <p:commandButton styleClass="MainButton2" resetValues="true" value="ثبت" update=":formmain:tbmain formnew :menubar" onsuccess="PF('dlg1').hide();" style="float: left" actionListener="#{questionFacade.doSubmit(adminFacade.userid)}" />
+                            <div class="EmptyBox20"></div>
+
+                        </h:form>
+                    </p:dialog>
+                    <p:dialog dir="rtl" header="گزینه ها" hideEffect="fade" showEffect="fade" 
+                              closable="true" closeOnEscape="true" widgetVar="dlg2" modal="true"  width="600">
+
+                        <f:view>
+
+
+                            <h:form id="formanswer" >
+                                <p:messages id="messages"  autoUpdate="true" closable="true"  />
+                                <p:inputText placeholder="متن گزینه" style="float: right" value="#{answerFacade.answerTest}" requiredMessage="لطفا متن گزینه را وارد نمایید" id="value" maxlength="90" required="true" class="Container60"/>
+                                <p:commandButton styleClass="MainButton2" resetValues="true" disabled="#{answerFacade.disable}" value="گزینه صحیح" update="tbanswer formanswer :menubar" style="float: left" actionListener="#{answerFacade.changeRightAnswer(questionFacade.qid)}" />
+                                <p:commandButton styleClass="MainButton2" resetValues="true" value="ثبت" update="tbanswer formanswer :menubar" style="float: left" actionListener="#{answerFacade.subAnswer(questionFacade.qid,adminFacade.userid)}" />
+                                <div class="EmptyBox10"></div>
+
+                                <p:dataTable id="tbanswer" value="#{answerFacade.AnswerByQuestion(questionFacade.qid)}" rowKey="#{item.answerId}" var="item" selectionMode="single" 
+                                             rows="7" paginator="true" paginatorTemplate="
+                                             {PreviousPageLink} {PageLinks} {NextPageLink} "
+                                             paginatorPosition="bottom"   emptyMessage="No answer found with given criteria">
+                                    <p:ajax event="rowSelect" update=":menubar formanswer"  listener="#{answerFacade.onRowSelect}"  />
+                                    <p:column class="ClassRTL fontIran Fs12"  width="15%">
+                                        <f:facet name="header">
+                                            <h:outputText value="ردیف"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.answerId}"/>
+                                    </p:column> 
+                                    <p:column class="ClassRTL fontIran Fs12"  width="85%">
+                                        <f:facet name="header">
+                                            <h:outputText value="جواب"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.value}"/>
+                                    </p:column>
+
+                                </p:dataTable>
+                            </h:form>
+                        </f:view>
+
+
+                    </p:dialog>
+
+                    <p:dialog dir="rtl" header="آپلود تصویر" hideEffect="fade" showEffect="fade" 
+                              closable="true" closeOnEscape="true" widgetVar="dlg3" modal="true" >
+                        <h:form id="formphoto">
+                            <p:fileUpload styleClass="MainButton2" fileUploadListener="#{questionFacade.handleFileUpload}" mode="advanced" dragDropSupport="false"
+                                          update="messages" sizeLimit="100000"  allowTypes="/(\.|\/)(png)$/" />
+                            <p:growl id="messages" showDetail="true" />
+                        </h:form>
+                    </p:dialog>
+
+                    <p:dialog dir="rtl" header="جزئیات" hideEffect="fade" showEffect="fade" 
+                              closable="true" closeOnEscape="true" widgetVar="dlg4" modal="true"  width="600">
+                        <h:form id="formdetail" class="fontIran Fs12">
+                            <img src="/resources/question/#{questionFacade.qid}.png" width="50" height="50" alt="question image" style=" margin-right: auto;margin-left: auto" /> 
+                            <div  class="EmptyBox5"></div>
+                            سوال: #{questionFacade.qquestion}
+                            <div  class="EmptyBox5"></div>
+                            پاسخ: #{questionFacade.answer}
+                            <div  class="EmptyBox5"></div>
+                            نکته: #{questionFacade.tip}
+                            <div  class="EmptyBox5"></div>
+                            راه حل: #{questionFacade.description}
+                            <div  class="EmptyBox5"></div>
+                            درجه دشواری: #{questionFacade.hardnes}
+                            <div  class="EmptyBox5"></div>
+                            درجه اهمیت: #{questionFacade.importance}
+                            <div  class="EmptyBox5"></div>
+                            فصل: #{questionFacade.chapter}
+                            <div  class="EmptyBox5"></div>
+                            وارد کننده: #{questionFacade.creator}
+                            <div  class="EmptyBox5"></div>
+                        </h:form>
+                    </p:dialog>
+                </div>     
+                <ui:include src="/Template/footer.xhtml" />
+            </ui:insert>
+        </div>
+
+        <p:ajaxStatus style="width:32px; height:32px; position:fixed; left:12px; bottom:10px">
+            <f:facet name="start">
+                <p:graphicImage name="images/preloader.gif" library="sentinel-layout"/>
+            </f:facet>
+
+            <f:facet name="complete">
+                <h:outputText value="" />
+            </f:facet>
+        </p:ajaxStatus>
+
+        <h:outputStylesheet name="css/font-icon-layout.css" library="sentinel-layout" />
+        <h:outputStylesheet name="css/sentinel-layout.css" library="sentinel-layout" />
+        <h:outputStylesheet name="css/core-layout.css" library="sentinel-layout" />
+    </h:body>
+
+</html>

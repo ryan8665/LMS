@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="refresh" content="#{facesContext.externalContext.sessionMaxInactiveInterval};url=#{request.contextPath}/login.xhtml"/>
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title>بن تخفیف استفاده شده</title>
+        <h:outputScript name="js/layout.js" library="sentinel-layout" />
+        <ui:insert name="head" />
+    </h:head>
+
+    <h:body class="ui-sentinel-rtl" >        
+        <ui:include src="/Template/topbar.xhtml" />
+
+        <ui:include src="/Template/leftmenu.xhtml" />
+
+        <div id="layout-portlets-cover" class="fontRegular">
+            <ui:insert name="content">
+                <div class="ContainerIndent">
+                    <p:panel style="min-height: 500px">
+                        <div class="ContainerIndent">
+                            <div dir="rtl">
+                                <h:form id="menubar">
+                                    <p:commandButton styleClass="MainButton2" update=":formdetinvoice" disabled="#{promotionUserFacade.disable}" value="جزئیات" type="button" onclick="PF('dlg1').show();" />
+                                    <p:commandButton styleClass="MainButton2" ajax="false" style="float: left" value="Export" type="text" >
+                                        <p:dataExporter id="exporter" type="xls" target=":formmain:tbmain" fileName="exporte" />
+                                    </p:commandButton>
+                                </h:form>
+                            </div>
+                            <div class="EmptyBox10"></div>                              
+                            <f:view>
+                                <h:form id="formmain">
+                                    <p:dataTable id="tbmain" value="#{promotionUserFacade.promotionUser}" rowKey="#{item.promotionUserId}" var="item" 
+                                                 selectionMode="single" rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} 
+                                                 {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                                 rowsPerPageTemplate="10,15,25" resizableColumns="true" emptyMessage="No promotionUser found with given criteria">
+                                        <p:ajax event="rowSelect" update=":formdetinvoice :menubar" listener="#{promotionUserFacade.onRowSelect}"  />
+                                        <p:column class="ClassRTL fontIran Fs12" width="15%" sortBy="#{item.userId.userInformationId.mobile}" filterBy="#{item.userId.userInformationId.mobile}" filterMatchMode="contains">
+                                            <f:facet name="header">
+                                                <h:outputText value="همراه"/>
+                                            </f:facet>
+                                            <h:outputText value="#{item.userId.userInformationId.mobile}"/>
+                                        </p:column>
+
+                                        <p:column class="ClassRTL fontIran Fs12" width="55%" sortBy="#{item.description}" filterBy="#{item.description}" filterMatchMode="contains">
+                                            <f:facet name="header">
+                                                <h:outputText value="توضیحات"/>
+                                            </f:facet>
+                                            <h:outputText value="#{item.description}"/>
+                                        </p:column>
+                                        <p:column class="ClassRTL fontIran Fs12" width="30%" sortBy="#{item.userId.userInformationId.lname}" filterBy="#{item.userId.userInformationId.lname}" filterMatchMode="contains">
+                                            <f:facet name="header">
+                                                <h:outputText value="کاربر"/>
+                                            </f:facet>
+                                            <h:outputText value="#{item.userId.userInformationId.fname} #{item.userId.userInformationId.lname}"/>
+                                        </p:column>
+                                        
+                                    </p:dataTable>
+                                </h:form>
+                            </f:view>
+                            <div  class="EmptyBox20"></div>
+                        </div>
+                    </p:panel>
+                    <div class="EmptyBox20"></div>
+                    <p:dialog dir="rtl" header="ریز تراکنش" hideEffect="fade" showEffect="fade" 
+                  closable="true" closeOnEscape="true" widgetVar="dlg1" modal="true"  width="600">
+            <h:form id="formdetinvoice">
+                
+            </h:form>  
+        </p:dialog>
+
+                </div>     
+                <ui:include src="/Template/footer.xhtml" />
+            </ui:insert>
+        </div>
+        
+        <p:ajaxStatus style="width:32px; height:32px; position:fixed; left:12px; bottom:10px">
+            <f:facet name="start">
+                <p:graphicImage name="images/preloader.gif" library="sentinel-layout"/>
+            </f:facet>
+
+            <f:facet name="complete">
+                <h:outputText value="" />
+            </f:facet>
+        </p:ajaxStatus>
+
+        <h:outputStylesheet name="css/font-icon-layout.css" library="sentinel-layout" />
+        <h:outputStylesheet name="css/sentinel-layout.css" library="sentinel-layout" />
+        <h:outputStylesheet name="css/core-layout.css" library="sentinel-layout" />
+    </h:body>
+
+</html>
